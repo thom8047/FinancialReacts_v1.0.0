@@ -1,0 +1,277 @@
+{
+    "transaction_data": {
+        "submissions": 2,
+        "accounts": [],
+        "description": "Creating JSON transaction data; pulling it in from file.",
+        "version": "1.0.0"
+    },
+    "Statement0": {
+        "ACCOUNTNUMBER": "Ending in 8949",
+        "FROM": "08/07/2021",
+        "TO": "09/06/2021",
+        "transaction0": {
+            "TRANS_DATE": "08/06",
+            "POST_DATE": "08/07",
+            "REF_ID": "24137466V01A8W5QE",
+            "DESCR": "TST* LUNA S TACOS & TEQUI GARDEN CITY  CO",
+            "CHARGE": "21.19"
+        },
+        "transaction1": {
+            "TRANS_DATE": "08/08",
+            "POST_DATE": "08/08",
+            "REF_ID": "24692166W2XN85ESZ",
+            "DESCR": "COMCAST CABLE COMM       800-COMCAST  CO",
+            "CHARGE": "69.99"
+        },
+        "transaction2": {
+            "TRANS_DATE": "08/09",
+            "POST_DATE": "08/09",
+            "REF_ID": "24055226YBLNAAY81",
+            "DESCR": "WESTLAKE WINE & SPIRITS GREELEY  CO",
+            "CHARGE": "19.25"
+        },
+        "transaction3": {
+            "TRANS_DATE": "08/13",
+            "POST_DATE": "08/13",
+            "REF_ID": "2444500718PVPF0WB",
+            "DESCR": "KING SOOPERS #0011 GREELEY  CO",
+            "CHARGE": "72.40"
+        },
+        "transaction4": {
+            "TRANS_DATE": "08/14",
+            "POST_DATE": "08/14",
+            "REF_ID": "249430073RQEBT8A0",
+            "DESCR": "BASKIN #356597 GREELEY  CO",
+            "CHARGE": "7.47"
+        },
+        "transaction5": {
+            "TRANS_DATE": "08/15",
+            "POST_DATE": "08/15",
+            "REF_ID": "2444500748PSRGSDP",
+            "DESCR": "KING SOOPERS #0011 GREELEY  CO",
+            "CHARGE": "27.53"
+        },
+        "transaction6": {
+            "TRANS_DATE": "08/15",
+            "POST_DATE": "08/15",
+            "REF_ID": "2469216732XZWAVBV",
+            "DESCR": "XFINITY MOBILE           888-936-4968 PA",
+            "CHARGE": "47.93"
+        },
+        "transaction7": {
+            "TRANS_DATE": "08/21",
+            "POST_DATE": "08/21",
+            "REF_ID": "24231687ARBGK848Q",
+            "DESCR": "SAFEWAY #1440 MONUMENT  CO",
+            "CHARGE": "35.14"
+        },
+        "transaction8": {
+            "TRANS_DATE": "08/21",
+            "POST_DATE": "08/21",
+            "REF_ID": "2444500798PS6QRAG",
+            "DESCR": "KING SOOPERS #0611 FUEL GREELEY  CO",
+            "CHARGE": "50.39"
+        },
+        "transaction9": {
+            "TRANS_DATE": "08/22",
+            "POST_DATE": "08/22",
+            "REF_ID": "24445007A8PVXFGJK",
+            "DESCR": "KING SOOPERS #0011 GREELEY  CO",
+            "CHARGE": "56.66"
+        },
+        "transaction10": {
+            "TRANS_DATE": "08/24",
+            "POST_DATE": "08/24",
+            "REF_ID": "24453887Q000EJXYG",
+            "DESCR": "CANYON MARKET PLACE LONGMONT  CO",
+            "CHARGE": "7.79"
+        },
+        "transaction11": {
+            "TRANS_DATE": "08/24",
+            "POST_DATE": "08/24",
+            "REF_ID": "24692167Q2XD4K1ZH",
+            "DESCR": "Prime Video*2D6073W00    888-802-3080 WA",
+            "CHARGE": "3.20"
+        },
+        "transaction12": {
+            "TRANS_DATE": "08/25",
+            "POST_DATE": "08/25",
+            "REF_ID": "24692167E2XMJT6WH",
+            "DESCR": "FIRESTONE353233 GREELEY  CO",
+            "CHARGE": "62.58"
+        },
+        "transaction13": {
+            "TRANS_DATE": "08/26",
+            "POST_DATE": "08/26",
+            "REF_ID": "24137467F019SER25",
+            "DESCR": "SPEEDWAY 09494 2537 EAGLE PAGOSA SPRING CO",
+            "CHARGE": "5.18"
+        },
+        "transaction14": {
+            "TRANS_DATE": "08/26",
+            "POST_DATE": "08/26",
+            "REF_ID": "24445007E8PSZ6JEP",
+            "DESCR": "KING SOOPERS #0608 FUEL HIGHLANDS RAN CO",
+            "CHARGE": "56.87"
+        },
+        "transaction15": {
+            "TRANS_DATE": "08/26",
+            "POST_DATE": "08/26",
+            "REF_ID": "24453887E000ET6FD",
+            "DESCR": "CANYON MARKET PLACE LONGMONT  CO",
+            "CHARGE": "7.05"
+        },
+        "transaction16": {
+            "TRANS_DATE": "08/28",
+            "POST_DATE": "08/28",
+            "REF_ID": "24445007G8PSN2WBX",
+            "DESCR": "CITY-MARKET #0421 DURANGO  CO",
+            "CHARGE": "29.82"
+        },
+        "transaction17": {
+            "TRANS_DATE": "08/29",
+            "POST_DATE": "08/29",
+            "REF_ID": "24445007H8PSZ4J7K",
+            "DESCR": "KING SOOPERS #0011 GREELEY  CO",
+            "CHARGE": "48.38"
+        }
+    },
+    "Statement1": {
+        "ACCOUNTNUMBER": "Ending in 8949",
+        "FROM": "07/08/2021",
+        "TO": "08/06/2021",
+        "transaction0": {
+            "TRANS_DATE": "07/08",
+            "POST_DATE": "07/08",
+            "REF_ID": "24445005X8PSX9F8G",
+            "DESCR": "KING SOOPERS #0011 GREELEY  CO",
+            "CHARGE": "61.09"
+        },
+        "transaction1": {
+            "TRANS_DATE": "07/08",
+            "POST_DATE": "07/08",
+            "REF_ID": "24692165X2X6Q0WZA",
+            "DESCR": "COMCAST CABLE COMM       800-COMCAST  CO",
+            "CHARGE": "69.99"
+        },
+        "transaction2": {
+            "TRANS_DATE": "07/12",
+            "POST_DATE": "07/12",
+            "REF_ID": "2444500618PSB6EE9",
+            "DESCR": "KING SOOPERS #0611 FUEL GREELEY  CO",
+            "CHARGE": "41.29"
+        },
+        "transaction3": {
+            "TRANS_DATE": "07/15",
+            "POST_DATE": "07/15",
+            "REF_ID": "2413363640FYXHTGA",
+            "DESCR": "USAA INSURANCE PAYMENT   800-531-8111 TX",
+            "CHARGE": "122.83"
+        },
+        "transaction4": {
+            "TRANS_DATE": "07/16",
+            "POST_DATE": "07/16",
+            "REF_ID": "2442629670GTPAY83",
+            "DESCR": "parkreceipts.com T       844-445-0485 TX",
+            "CHARGE": "15.40"
+        },
+        "transaction5": {
+            "TRANS_DATE": "07/16",
+            "POST_DATE": "07/16",
+            "REF_ID": "244310666609S9RZ3",
+            "DESCR": "TOPGOLF CENTENNIAL 020-2 CENTENNIAL  CO",
+            "CHARGE": "18.02"
+        },
+        "transaction6": {
+            "TRANS_DATE": "07/16",
+            "POST_DATE": "07/16",
+            "REF_ID": "2469216652X88TJLJ",
+            "DESCR": "XFINITY MOBILE           888-936-4968 PA",
+            "CHARGE": "32.98"
+        },
+        "transaction7": {
+            "TRANS_DATE": "07/16",
+            "POST_DATE": "07/16",
+            "REF_ID": "2475542664NVQE55E",
+            "DESCR": "ARAMARK COORS FIELD DENVER  CO",
+            "CHARGE": "29.70"
+        },
+        "transaction8": {
+            "TRANS_DATE": "07/17",
+            "POST_DATE": "07/17",
+            "REF_ID": "2444500668PSD9W8H",
+            "DESCR": "KING SOOPERS #0611 FUEL GREELEY  CO",
+            "CHARGE": "37.40"
+        },
+        "transaction9": {
+            "TRANS_DATE": "07/18",
+            "POST_DATE": "07/18",
+            "REF_ID": "24034546802R4X2GH",
+            "DESCR": "ARCO BARNEY'S MANDAN  ND",
+            "CHARGE": "34.31"
+        },
+        "transaction10": {
+            "TRANS_DATE": "07/18",
+            "POST_DATE": "07/18",
+            "REF_ID": "249416668RQEBEWHJ",
+            "DESCR": "HOLIDAY STATIONS 465 RAPID CITY  SD",
+            "CHARGE": "6.57"
+        },
+        "transaction11": {
+            "TRANS_DATE": "07/24",
+            "POST_DATE": "07/24",
+            "REF_ID": "24137466E00Z0VG20",
+            "DESCR": "MINIT MART #0551 CLOQUET  MN",
+            "CHARGE": "23.54"
+        },
+        "transaction12": {
+            "TRANS_DATE": "07/24",
+            "POST_DATE": "07/24",
+            "REF_ID": "24445006E8PWYSGP6",
+            "DESCR": "CASEYS GEN STORE 2644 EARLHAM  IA",
+            "CHARGE": "40.14"
+        },
+        "transaction13": {
+            "TRANS_DATE": "07/25",
+            "POST_DATE": "07/25",
+            "REF_ID": "24445006E8PWYSGTG",
+            "DESCR": "KING SOOPERS #0011 GREELEY  CO",
+            "CHARGE": "42.05"
+        },
+        "transaction14": {
+            "TRANS_DATE": "07/26",
+            "POST_DATE": "07/26",
+            "REF_ID": "24455016F447XWV4J",
+            "DESCR": "WAL-MART #0980 GREELEY  CO",
+            "CHARGE": "6.16"
+        },
+        "transaction15": {
+            "TRANS_DATE": "07/26",
+            "POST_DATE": "07/26",
+            "REF_ID": "24692166F2X4FYD47",
+            "DESCR": "SQ *35TH BLUE MUG Greeley  CO",
+            "CHARGE": "14.77"
+        },
+        "transaction16": {
+            "TRANS_DATE": "07/28",
+            "POST_DATE": "07/28",
+            "REF_ID": "24431066H2DZ13PYQ",
+            "DESCR": "AMZN MKTP US*2P5ZI3CP0 AM AMZN.COM/BILL WA",
+            "CHARGE": "3.98"
+        },
+        "transaction17": {
+            "TRANS_DATE": "07/28",
+            "POST_DATE": "07/28",
+            "REF_ID": "24445006H8PSYJFY2",
+            "DESCR": "KING SOOPERS #0011 GREELEY  CO",
+            "CHARGE": "37.73"
+        },
+        "transaction18": {
+            "TRANS_DATE": "07/28",
+            "POST_DATE": "07/28",
+            "REF_ID": "24692166H2XBY6PYZ",
+            "DESCR": "AMZN Mktp US*2E9QK4YP0 Amzn.com/bill WA",
+            "CHARGE": "14.97"
+        }
+    }
+}

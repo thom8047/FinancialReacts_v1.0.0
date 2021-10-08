@@ -1,0 +1,16 @@
+.App {
+  text-align: left;
+}
+
+.App-header {
+  width: 100%;
+  color: #fff;
+  padding: 10px;
+  padding-left: 100px;
+  border-bottom: 3px solid darkgrey;
+  background-color: #5e6679;
+}
+
+.App-link {
+  color: #61dafb;
+}
