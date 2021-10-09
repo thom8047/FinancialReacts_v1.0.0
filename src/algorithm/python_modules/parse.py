@@ -75,6 +75,7 @@ class PDFParser:
         loopInLoop = 0
         transDictionary = {}
         numberOfTrans = int(len(transac)/5)
+        self.statement["transaction"] = []
 
         for a in range(numberOfTrans):
             # We need to split this here as a 5 bit dictionary as transaction1, transaction2, ... etc.
@@ -86,7 +87,7 @@ class PDFParser:
                 "CHARGE": transac[a+loopInLoop + 4],
             }
             name = "transaction" + str(a)
-            self.statement[name] = transDictionary
+            self.statement["transaction"].append(transDictionary)
 
             # reset
             transDictionary = {}
