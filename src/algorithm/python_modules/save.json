@@ -2,7 +2,7 @@
     "transaction_data": {
         "submissions": 0,
         "accounts": [],
-        "description": "~ DESCRIBE ~",
+        "description": "Creating JSON transaction data; pulling it in from file.",
         "version": "1.0.0"
     }
 }

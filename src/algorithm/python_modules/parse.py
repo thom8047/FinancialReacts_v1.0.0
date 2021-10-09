@@ -2,6 +2,7 @@ import PyPDF2 as pdf
 import copy
 import json
 import sys
+import os
 
 # GLOBAL RECIEVED VARIABLES
 # Needs to be updated with:
@@ -40,6 +41,7 @@ class PDFParser:
 
         # Now lets config transaction data and add in new statement
         self.currentSub = self.financialDict["transaction_data"]["submissions"]
+        self.currentAcc = self.financialDict["transaction_data"]["accounts"]
         self.financialDict[f"Statement{self.currentSub}"] = {}
         self.statement = self.financialDict[f"Statement{self.currentSub}"]
 
@@ -49,6 +51,9 @@ class PDFParser:
 
             if (iterTrack == 2):
                 self.statement["ACCOUNTNUMBER"] = line
+                self.currentAcc.append(line)
+                # print(self.currentAcc)
+
             if (iterTrack == 4):
                 _from, to = line.split(' ')[0], line.split(' ')[2]
                 for key, value in self.financialDict.items():
@@ -96,6 +101,8 @@ class PDFParser:
         # Now increment the number of statements and the accounts list
         self.financialDict["transaction_data"]["submissions"] = int(
             self.currentSub)+1
+        self.financialDict["transaction_data"]["accounts"] = list(
+            set(self.currentAcc))
 
         json.dump(self.financialDict, self.transJSON, indent=4)
         self.close()
@@ -112,8 +119,12 @@ class PDFParser:
         print(error_message)
         json.dump(self.financialDict, self.transJSON, indent=4)
 
+        self.close()
 
-pathway = "C:/Users/kedwa/Desktop/statements/090620WellsFargo.pdf"
 
-obj = PDFParser(pathway)
-obj.parse()
+directory = "C:/Users/kedwa/Desktop/statements/"
+
+for file in os.listdir(directory):
+    pathway = directory+file
+    obj = PDFParser(pathway)
+    obj.parse()
