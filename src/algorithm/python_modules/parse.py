@@ -1,7 +1,5 @@
 import PyPDF2 as pdf
-import copy
 import json
-import sys
 import os
 
 # GLOBAL RECIEVED VARIABLES
@@ -11,14 +9,16 @@ import os
 #     - Adding account ending number to transaction data
 #
 
-sysArgs = sys.argv
-
 
 class PDFParser:
     def __init__(self, path=None):
         self.transJSON = open('transaction.json', 'r')
         self.exitProgram = False
         self.path = path
+
+        # INIT Values for parsing
+        self.currentPDF = open(self.path, 'rb')
+        self.pdfReader = pdf.PdfFileReader(self.currentPDF)
 
         # Need an if to check if our json data contains this info
         try:
@@ -30,31 +30,39 @@ class PDFParser:
         except json.JSONDecodeError:
             print("empty file, continue")
 
-    def parse(self):
-        self.currentPDF = open(self.path, 'rb')
-        self.pdfReader = pdf.PdfFileReader(self.currentPDF)
+    def parseAgain(self):
+        for page in range(self.pdfReader.getNumPages()):
+            if not (page):
+                pass
+            else:
+                self.parse(page)
+            # pageObj = self.pdfReader.getPage(page)
 
-        pageObj = self.pdfReader.getPage(0)
+    def parse(self, pageNum=0):
+        parsedAgain = False if not pageNum else True
+
+        pageObj = self.pdfReader.getPage(pageNum)
         text = pageObj.extractText()
         iterTrack = 0
         transHistStart = 0
 
-        # Now lets config transaction data and add in new statement
-        self.currentSub = self.financialDict["transaction_data"]["submissions"]
-        self.currentAcc = self.financialDict["transaction_data"]["accounts"]
-        self.financialDict[f"Statement{self.currentSub}"] = {}
-        self.statement = self.financialDict[f"Statement{self.currentSub}"]
+        # Now lets config transaction data and add in new statement on first parse
+        if not parsedAgain:
+            self.currentSub = self.financialDict["transaction_data"]["submissions"]
+            self.currentAcc = self.financialDict["transaction_data"]["accounts"]
+            self.financialDict[f"Statement{self.currentSub}"] = {}
+            self.statement = self.financialDict[f"Statement{self.currentSub}"]
 
         for line in text.split('\n'):
             if self.exitProgram:
                 break
 
-            if (iterTrack == 2):
+            if (iterTrack == 2 and not parsedAgain):
                 self.statement["ACCOUNTNUMBER"] = line
-                self.currentAcc.append(line)
-                # print(self.currentAcc)
+                if not (line in self.currentAcc):
+                    self.currentAcc.append(line)
 
-            if (iterTrack == 4):
+            if (iterTrack == 4 and not parsedAgain):
                 _from, to = line.split(' ')[0], line.split(' ')[2]
                 for key, value in self.financialDict.items():
                     if (key == "transaction_data") or (key == f"Statement{self.currentSub}"):
@@ -67,20 +75,25 @@ class PDFParser:
                 self.statement["FROM"] = _from
                 self.statement["TO"] = to
 
+            if ("TOTAL PURCHASES, BALANCE TRANSFERS & OTHER CHARGES FOR THIS PERIOD" in line):
+                self.write(text.split('\n')[transHistStart+1:iterTrack])
+                self.save()
+                break
             if ("Purchases, Balance Transfers & Other Charges" in line):
                 transHistStart = iterTrack
             if ("Detach and mail with check payable to" in line):
                 self.write(text.split('\n')[transHistStart+1:iterTrack])
+                self.parseAgain()
                 break
 
             iterTrack += 1
 
     def write(self, transac):
-        #currentFile = json.load(self.transJSON);
         loopInLoop = 0
         transDictionary = {}
         numberOfTrans = int(len(transac)/5)
-        self.statement["transaction"] = []
+        self.statement["transaction"] = [] if not (
+            "transaction" in self.statement.keys()) else self.statement["transaction"]
 
         for a in range(numberOfTrans):
             # We need to split this here as a 5 bit dictionary as transaction1, transaction2, ... etc.
@@ -91,24 +104,24 @@ class PDFParser:
                 "DESCR": transac[a+loopInLoop + 3],
                 "CHARGE": transac[a+loopInLoop + 4],
             }
-            name = "transaction" + str(a)
+
             self.statement["transaction"].append(transDictionary)
 
             # reset
             transDictionary = {}
             loopInLoop += 4
 
-        # Now increment the number of statements and the accounts list
+    def save(self):
+        # Now increment the number of statements
         self.financialDict["transaction_data"]["submissions"] = int(
             self.currentSub)+1
-        self.financialDict["transaction_data"]["accounts"] = list(
-            set(self.currentAcc))
 
         json.dump(self.financialDict, self.transJSON, indent=4)
         self.close()
 
     def close(self):
         self.transJSON.close()
+        # self.currentPDF.close()
 
     def exit(self, error=0):
         self.exitProgram = True

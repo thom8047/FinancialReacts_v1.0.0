@@ -5,7 +5,7 @@
             "Ending in 8949"
         ],
         "description": "Creating JSON transaction data; pulling it in from file.",
-        "version": "1.0.0"
+        "version": "1.2.1"
     },
     "Statement0": {
         "ACCOUNTNUMBER": "Ending in 8949",
@@ -144,6 +144,20 @@
                 "REF_ID": "24692166H2XBY6PYZ",
                 "DESCR": "AMZN Mktp US*2E9QK4YP0 Amzn.com/bill WA",
                 "CHARGE": "14.97"
+            },
+            {
+                "TRANS_DATE": "07/29",
+                "POST_DATE": "07/29",
+                "REF_ID": "24231686KRBGJ8ZDN",
+                "DESCR": "SAFEWAY #2666 GREELEY  CO",
+                "CHARGE": "19.25"
+            },
+            {
+                "TRANS_DATE": "08/03",
+                "POST_DATE": "08/03",
+                "REF_ID": "24055226RBLNHZ2RG",
+                "DESCR": "WESTLAKE WINE & SPIRITS GREELEY  CO",
+                "CHARGE": "10.69"
             }
         ]
     },
@@ -277,6 +291,20 @@
                 "REF_ID": "24445007H8PSZ4J7K",
                 "DESCR": "KING SOOPERS #0011 GREELEY  CO",
                 "CHARGE": "48.38"
+            },
+            {
+                "TRANS_DATE": "08/30",
+                "POST_DATE": "08/30",
+                "REF_ID": "24055227KBLZXDK7R",
+                "DESCR": "WESTLAKE WINE & SPIRITS GREELEY  CO",
+                "CHARGE": "6.41"
+            },
+            {
+                "TRANS_DATE": "08/31",
+                "POST_DATE": "08/31",
+                "REF_ID": "24453887K000F273X",
+                "DESCR": "CANYON MARKET PLACE LONGMONT  CO",
+                "CHARGE": "5.61"
             }
         ]
     }
