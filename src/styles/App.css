@@ -10,7 +10,47 @@
   border-bottom: 3px solid darkgrey;
   background-color: #5e6679;
 }
+.change-user-btn {
+  all: unset;
+  cursor: pointer;
+  background: #000;
+  opacity: 0.5;
+  padding: 5px 5px;
+  transition: 0.5s;
+}
+.change-user-btn:hover {
+  opacity: 1;
+}
 
 .App-link {
   color: #61dafb;
+}
+
+.navbar {
+  color: #fff;
+  padding: 10px;
+}
+
+.report {
+  color: #fff;
+  border: 1px solid darkgray;
+  height: 80%;
+  width: 90%;
+}
+.report-child {
+  height: 25%;
+  margin-left: 5%;
+  line-height: 300%;
+}
+.report-bold {
+  color: #ff7f7f;
+  padding: 0 10px;
+}
+
+.App-chart-n-rep-parent {
+  display: flex;
+}
+
+.chart-n-rep-child {
+  flex: 1;
 }
