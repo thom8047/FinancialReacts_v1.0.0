@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# personal
+/src/algorithm/python_modules/
+
 # testing
 /coverage
 
