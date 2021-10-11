@@ -1,8 +1,0 @@
-{
-    "transaction_data": {
-        "submissions": 0,
-        "accounts": [],
-        "description": "Creating JSON transaction data; pulling it in from file.",
-        "version": "1.2.1"
-    }
-}
