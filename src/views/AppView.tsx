@@ -1,7 +1,8 @@
 import { ResponsiveContainer } from "recharts";
 import parseData from "../algorithm/parse";
-// import { Transaction } from "../types";
+import { DateTime } from "../types";
 import Chart from "./Chart";
+import DatePicker from "../components/DatePicker";
 import React from "react";
 
 let parsedData: any = parseData();
@@ -11,15 +12,37 @@ Object.entries(parsedData).forEach(([k, v]) => {
   allData = allData.concat(parsedData[k].transaction);
 });
 
+const initDate = () => {
+  const current = new Date()
+    .toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+    })
+    .split("/");
+  const prevMonth =
+    parseInt(current[0]) - 1 < 1 ? 12 : parseInt(current[0]) - 1;
+
+  return {
+    fromMonth: prevMonth,
+    toMonth: parseInt(current[0]),
+    year: parseInt(current[1]),
+  } as DateTime;
+};
+
 function AppView() {
   // States
-  const [data, setData] = React.useState(allData);
+  /* const [data, setData] = React.useState(allData); */
   const [name, setName] = React.useState("Camryn");
+  const [dates, setDates] = React.useState(initDate());
+
+  React.useEffect(() => {
+    console.log("change");
+  });
 
   // Const variables that are based on data to be displayed
   const totalExp = () => {
     let sum: number = 0;
-    for (let trans of data) {
+    for (let trans of handleDataChange()) {
       sum += parseFloat(trans.CHARGE);
     }
     return sum.toLocaleString(undefined, {
@@ -31,9 +54,51 @@ function AppView() {
     <b className="report-bold">{inner}</b>
   );
 
-  // Comst event handlers
+  // Const event handlers
   const handleEvent = (event: any) => {
     setName(() => (name === "Camryn" ? "Kyle" : "Camryn"));
+  };
+  const handleDataChange = (): any[] => {
+    const { fromMonth, toMonth, year } = dates;
+
+    let brokenData: any[] = [];
+    allData.forEach((transaction, index) => {
+      const post_date = Date.parse(transaction.POST_DATE);
+      const from_date = Date.parse(`${year}/${fromMonth}`);
+      const to_date =
+        toMonth + 1 > 12
+          ? Date.parse(`${year + 1}/1`)
+          : Date.parse(`${year}/${toMonth}`);
+      if (post_date > from_date && post_date < to_date) {
+        brokenData.push(transaction);
+      }
+    });
+
+    return brokenData;
+  };
+  const handleDateChange = (text: string, value: string) => {
+    // To stop future errors
+    /* if (
+      (text === "FROM: " && parseInt(value) >= dates.toMonth) ||
+      (text === "TO: " && parseInt(value) <= dates.fromMonth)
+    ) {
+      console.log("DO NOTHING");
+      return;
+    } */
+    let nextState: DateTime = {
+      fromMonth: dates.fromMonth,
+      toMonth: dates.toMonth,
+      year: dates.year,
+    };
+    if (text === "FROM: ") {
+      nextState.fromMonth = parseInt(value);
+    } else if (text === "TO: ") {
+      nextState.toMonth = parseInt(value);
+    } else if (text === "YEAR: ") {
+      nextState.year = parseInt(value);
+    }
+
+    setDates(nextState);
   };
 
   return (
@@ -46,13 +111,34 @@ function AppView() {
       </div>
       {/* This will be the bar under the app header to display from to and anything else */}
       <div className="navbar">
-        <span>FROM: </span>
-        <span>TO: </span>
+        {[
+          <DatePicker
+            key={"from"}
+            text={"FROM: "}
+            date_type={0}
+            defaultValue={dates.fromMonth}
+            onDateChange={handleDateChange}
+          />,
+          <DatePicker
+            key={"to"}
+            text={"TO: "}
+            date_type={0}
+            defaultValue={dates.toMonth}
+            onDateChange={handleDateChange}
+          />,
+          <DatePicker
+            key={"year"}
+            text={"YEAR: "}
+            date_type={1}
+            defaultValue={dates.year}
+            onDateChange={handleDateChange}
+          />,
+        ]}
       </div>
       <div className="App-chart-n-rep-parent">
         <div className="chart-n-rep-child">
           <ResponsiveContainer width="50%" height="100%">
-            <Chart data={data} />
+            <Chart data={handleDataChange()} />
           </ResponsiveContainer>
         </div>
         <div className="chart-n-rep-child">
