@@ -3,8 +3,10 @@ import allData from "../algorithm/rtnData";
 import { DateTime } from "../types";
 import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";
+import InfoDisplay from "../components/InfoDisplay";
 import React from "react";
 
+// Put this in a separate script to clean up
 const initDate = () => {
   const current = new Date()
     .toLocaleDateString("en-US", {
@@ -24,12 +26,12 @@ const initDate = () => {
 
 function AppView() {
   // States
-  /* const [data, setData] = React.useState(allData); */
+  const [currentTrans, setCurrentTrans] = React.useState({ test: "test" });
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initDate());
 
   React.useEffect(() => {
-    console.log("change");
+    console.log(currentTrans);
   });
 
   // Const variables that are based on data to be displayed
@@ -123,8 +125,12 @@ function AppView() {
       <div className="App-chart-n-rep-parent">
         <div className="chart-n-rep-child">
           <ResponsiveContainer width="50%" height="100%">
-            <Chart data={handleDataChange()} />
+            <Chart
+              data={handleDataChange()}
+              setCurrentTrans={setCurrentTrans}
+            />
           </ResponsiveContainer>
+          <InfoDisplay data={handleDataChange()} />
         </div>
         <div className="chart-n-rep-child">
           <div className="report">

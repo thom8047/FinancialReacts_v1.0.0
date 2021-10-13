@@ -8,6 +8,7 @@ import {
   Legend,
 } from "recharts";
 import allData from "../algorithm/rtnData";
+import { Transaction } from "../types";
 import React from "react";
 
 // WE'RE USING POST DATE
@@ -24,10 +25,9 @@ function Chart(props: any) {
   };
 
   const handleClick = (event: any) => {
-    allData.forEach((value: any) => {
+    allData.forEach((value: Transaction) => {
       if (value.POST_DATE === event.activeLabel) {
-        // Add label for the data
-        console.log(value);
+        props.setCurrentTrans(value);
       }
     });
   };

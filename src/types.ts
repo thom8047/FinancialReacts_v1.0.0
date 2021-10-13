@@ -1,6 +1,9 @@
 interface Transaction {
-  date: string;
-  amount: string;
+  TRANS_DATE: string;
+  POST_DATE: string;
+  REF_ID: string;
+  DESCR: string;
+  CHARGE: string;
 }
 
 interface DateTime {
