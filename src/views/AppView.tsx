@@ -1,16 +1,9 @@
 import { ResponsiveContainer } from "recharts";
-import parseData from "../algorithm/parse";
+import allData from "../algorithm/rtnData";
 import { DateTime } from "../types";
-import Chart from "./Chart";
+import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";
 import React from "react";
-
-let parsedData: any = parseData();
-let allData: any[] = [];
-
-Object.entries(parsedData).forEach(([k, v]) => {
-  allData = allData.concat(parsedData[k].transaction);
-});
 
 const initDate = () => {
   const current = new Date()
@@ -77,14 +70,6 @@ function AppView() {
     return brokenData;
   };
   const handleDateChange = (text: string, value: string) => {
-    // To stop future errors
-    /* if (
-      (text === "FROM: " && parseInt(value) >= dates.toMonth) ||
-      (text === "TO: " && parseInt(value) <= dates.fromMonth)
-    ) {
-      console.log("DO NOTHING");
-      return;
-    } */
     let nextState: DateTime = {
       fromMonth: dates.fromMonth,
       toMonth: dates.toMonth,

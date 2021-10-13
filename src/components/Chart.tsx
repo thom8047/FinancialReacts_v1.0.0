@@ -7,7 +7,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import allData from "../algorithm/rtnData";
 import React from "react";
+
+// WE'RE USING POST DATE
 
 function Chart(props: any) {
   const getLargestPurchase = (): number => {
@@ -20,8 +23,13 @@ function Chart(props: any) {
     return max;
   };
 
-  const handleClick = () => {
-    console.log("test");
+  const handleClick = (event: any) => {
+    allData.forEach((value: any) => {
+      if (value.POST_DATE === event.activeLabel) {
+        // Add label for the data
+        console.log(value);
+      }
+    });
   };
 
   return (
@@ -30,6 +38,7 @@ function Chart(props: any) {
       height={300}
       data={props.data}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+      onClick={handleClick}
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="TRANS_DATE" />
