@@ -1,6 +1,15 @@
 interface Transaction {
-  date: string;
-  amount: string;
+  TRANS_DATE: string;
+  POST_DATE: string;
+  REF_ID: string;
+  DESCR: string;
+  CHARGE: string;
 }
 
-export type { Transaction };
+interface DateTime {
+  fromMonth: number;
+  toMonth: number;
+  year: number;
+}
+
+export type { Transaction, DateTime };
