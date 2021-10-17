@@ -12,9 +12,25 @@ import allData from "../algorithm/rtnData";
 import { Transaction } from "../types";
 import React from "react";
 
+/* 
+To get all dates within the data:
+- First read through data to see which dates are within the date
+- Combine duplicates, and add in $0 charges for the empty dates
+- Don't mess up the display data, this will fuck up however the indices are read for the props.currentSelection
+- Make sure this is worth implementing. 
+*/
+
 // WE'RE USING POST DATE
 const getDate = (date: string) => {
   return Date.parse(date);
+};
+const getAllDates = (firstDate: string): number[] => {
+  var month = parseInt(firstDate.split("/")[0]);
+  var year = parseInt(firstDate.split("/")[2]);
+  return Array.from(
+    { length: new Date(year, month, 0).getDate() - 1 },
+    (_, i) => Date.parse(new Date(year, month, i + 1).toLocaleDateString())
+  );
 };
 
 function Chart(props: any) {
@@ -41,7 +57,6 @@ function Chart(props: any) {
   };
 
   const tickToDate = (tickVal: string) => {
-    console.log(tickVal);
     var date = new Date(parseInt(tickVal)).toLocaleDateString();
     return date;
   };
