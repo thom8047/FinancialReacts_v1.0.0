@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:python": "cd ./src/algorithm/python_modules/ && python parse.py && echo Done && npm start"
+    "start:python": "cd C:/Users/kedwa/Desktop/python_modules/ && python parse.py && echo Done && cd ../GitHub/LocalRepos/FinanceTracker/financial-reacts/ && npm start"
   },
   "eslintConfig": {
     "extends": [

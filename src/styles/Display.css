@@ -22,13 +22,6 @@
 
   color: var(--nonHover);
 }
-.priceTag:hover ~ .priceDescr {
-  --nonHover: #ff7f7f;
-}
-.priceTag:hover {
-  --nonHover: #ff7f7f;
-  cursor: pointer;
-}
 .priceTag {
   user-select: none;
   width: 70px;
@@ -39,6 +32,18 @@
   padding-top: 15px;
 
   color: var(--nonHover);
+}
+.priceSum {
+  position: absolute;
+  user-select: none;
+  width: 40%;
+  margin: 240px 10px;
+  color: var(--nonHover);
+}
+
+.clearState {
+  cursor: pointer;
+  float: right;
 }
 /* .priceInfo {
 

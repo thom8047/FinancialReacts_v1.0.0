@@ -11,7 +11,6 @@ function DatePicker(props: Props): JSX.Element {
   const { text, date_type, defaultValue } = props;
 
   const handleSubmit = (event: any) => {
-    const key = event.key || event.code;
     if (event.key === "Enter") {
       if (parseInt(event.currentTarget.value)) {
         if (date_type === 0) {

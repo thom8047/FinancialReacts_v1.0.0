@@ -1,5 +1,4 @@
-import transactions from "../algorithm/python_modules/transaction.json";
-import isEqual from "lodash";
+import transactions from "./python_modules/transaction.json";
 // import * as child from "child_process";
 // Probably won't need to use this package, because I'll just run the python script, but might as well keep its
 
