@@ -27,6 +27,7 @@ const initDate = () => {
 function AppView() {
   // States
   const [currentTrans, setCurrentTrans] = React.useState({ test: "test" });
+  const [curSelFromDisplay, setCurSelFromDisplay] = React.useState(-1);
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initDate());
 
@@ -128,9 +129,13 @@ function AppView() {
             <Chart
               data={handleDataChange()}
               setCurrentTrans={setCurrentTrans}
+              currentSelection={curSelFromDisplay}
             />
           </ResponsiveContainer>
-          <InfoDisplay data={handleDataChange()} />
+          <InfoDisplay
+            data={handleDataChange()}
+            setCurrentSelection={setCurSelFromDisplay}
+          />
         </div>
         <div className="chart-n-rep-child">
           <div className="report">

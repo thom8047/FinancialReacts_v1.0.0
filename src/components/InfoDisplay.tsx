@@ -1,9 +1,10 @@
 import "../styles/Display.css";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Transaction } from "../types";
 
 interface Props {
   data: Transaction[];
+  setCurrentSelection: Dispatch<SetStateAction<number>>;
 }
 
 function InfoDisplay(props: Props): any {
@@ -30,6 +31,7 @@ function InfoDisplay(props: Props): any {
     let chargeList: JSX.Element[] = [];
     props.data.forEach((value: Transaction, index: number) => {
       const handleHoverIn = () => {
+        props.setCurrentSelection(index);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
@@ -40,6 +42,7 @@ function InfoDisplay(props: Props): any {
         }
       };
       const handleHoverOut = () => {
+        props.setCurrentSelection(-1);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
