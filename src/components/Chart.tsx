@@ -79,7 +79,7 @@ function Chart(props: any) {
       />
       <YAxis domain={[0, num]} />
       <Tooltip />
-      <ReferenceLine x={props.currentSelection} stroke="#fff" label="CURRENT" />
+      <ReferenceLine x={props.currentSelection} stroke="#fff" label="" />
       <Legend />
       <Line
         type="monotone"

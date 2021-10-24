@@ -109,6 +109,12 @@ function InfoDisplay(props: Props): any {
             CLEAR
           </span>
         </div>
+
+        <div className="combinedDataDisplay">
+          Combined data:
+          <div>Camryn</div>
+          <div style={{ float: "right" }}>Kyle</div>
+        </div>
       </div>
     );
   };
