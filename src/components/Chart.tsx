@@ -24,14 +24,14 @@ To get all dates within the data:
 const getDate = (date: string) => {
   return Date.parse(date);
 };
-const getAllDates = (firstDate: string): number[] => {
+/* const getAllDates = (firstDate: string): number[] => {
   var month = parseInt(firstDate.split("/")[0]);
   var year = parseInt(firstDate.split("/")[2]);
   return Array.from(
     { length: new Date(year, month, 0).getDate() - 1 },
     (_, i) => Date.parse(new Date(year, month, i + 1).toLocaleDateString())
   );
-};
+}; */
 
 function Chart(props: any) {
   const getLargestPurchase = (): number => {
