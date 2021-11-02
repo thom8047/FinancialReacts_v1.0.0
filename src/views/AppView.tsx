@@ -1,5 +1,6 @@
 import { ResponsiveContainer } from "recharts";
-import allData from "../algorithm/rtnData";
+// import allData from "../algorithm/rtnData";
+import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
 import { DateTime } from "../types";
 import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";
@@ -26,19 +27,19 @@ const initDate = () => {
 
 function AppView() {
   // States
-  const [currentTrans, setCurrentTrans] = React.useState({ test: "test" });
+  // const [currentTrans, setCurrentTrans] = React.useState({ test: "test" });
   const [curSelFromDisplay, setCurSelFromDisplay] = React.useState(-1);
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initDate());
 
-  React.useEffect(() => {
-    console.log(currentTrans);
-  });
+  // React.useEffect(() => {
+  //   console.log(currentTrans);
+  // });
 
   // Const variables that are based on data to be displayed
   const totalExp = () => {
     let sum: number = 0;
-    for (let trans of handleDataChange()) {
+    for (let trans of spliceDataBasedOnDate(dates)) {
       sum += parseFloat(trans.CHARGE);
     }
     return sum.toLocaleString(undefined, {
@@ -53,24 +54,6 @@ function AppView() {
   // Const event handlers
   const handleEvent = (event: any) => {
     setName(() => (name === "Camryn" ? "Kyle" : "Camryn"));
-  };
-  const handleDataChange = (): any[] => {
-    const { fromMonth, toMonth, year } = dates;
-
-    let brokenData: any[] = [];
-    allData.forEach((transaction, index) => {
-      const post_date = Date.parse(transaction.POST_DATE);
-      const from_date = Date.parse(`${year}/${fromMonth}`);
-      const to_date =
-        toMonth + 1 > 12
-          ? Date.parse(`${year + 1}/1`)
-          : Date.parse(`${year}/${toMonth}`);
-      if (post_date > from_date && post_date < to_date) {
-        brokenData.push(transaction);
-      }
-    });
-
-    return brokenData;
   };
   const handleDateChange = (text: string, value: string) => {
     let nextState: DateTime = {
@@ -127,13 +110,13 @@ function AppView() {
         <div className="chart-n-rep-child">
           <ResponsiveContainer width="50%" height="100%">
             <Chart
-              data={handleDataChange()}
-              setCurrentTrans={setCurrentTrans}
+              dates={dates}
+              // setCurrentTrans={setCurrentTrans}
               currentSelection={curSelFromDisplay}
             />
           </ResponsiveContainer>
           <InfoDisplay
-            data={handleDataChange()}
+            data={spliceDataBasedOnDate(dates)}
             setCurrentSelection={setCurSelFromDisplay}
           />
         </div>

@@ -8,9 +8,14 @@ import {
   Legend,
   ReferenceLine,
 } from "recharts";
-import allData from "../algorithm/rtnData";
-import { Transaction } from "../types";
+import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
+// import { Transaction } from "../types";
 import React from "react";
+
+interface chargeInfo {
+  charge: number;
+  descr: string[];
+}
 
 /* 
 To get all dates within the data:
@@ -21,9 +26,9 @@ To get all dates within the data:
 */
 
 // WE'RE USING POST DATE
-const getDate = (date: string) => {
-  return Date.parse(date);
-};
+// const getDate = (date: string) => {
+//   return Date.parse(date);
+// };
 /* const getAllDates = (firstDate: string): number[] => {
   var month = parseInt(firstDate.split("/")[0]);
   var year = parseInt(firstDate.split("/")[2]);
@@ -34,12 +39,11 @@ const getDate = (date: string) => {
 }; */
 
 function Chart(props: any) {
+  const data: any[] = spliceDataBasedOnDate(props.dates);
+  console.log(data);
   const getLargestPurchase = (): number => {
     let max: number = 0;
-    for (let trans of props.data) {
-      var val = getDate(trans.POST_DATE);
-      trans.newPOST_DATE = val;
-      // console.log(trans.POST_DATE);
+    for (let trans of data) {
       if (parseFloat(trans.CHARGE) > max) {
         max = parseFloat(trans.CHARGE);
       }
@@ -48,12 +52,63 @@ function Chart(props: any) {
     return max;
   };
 
-  const handleClick = (event: any) => {
-    allData.forEach((value: Transaction) => {
-      if (value.POST_DATE === event.activeLabel) {
-        props.setCurrentTrans(value);
+  const putTransactionIn = (stringifiedDate: string): chargeInfo => {
+    const info: chargeInfo = {
+      charge: 0,
+      descr: [],
+    };
+
+    const copy = Array.from(data);
+    console.log(copy, stringifiedDate);
+
+    for (const trans of copy) {
+      const transactionDate: string = trans.TRANS_DATE.split("/")
+        .map((ele: string) => parseInt(ele))
+        .join("/");
+
+      if (transactionDate === stringifiedDate) {
+        info.charge += parseFloat(trans.CHARGE);
+        info.descr.push(trans.DESCR);
       }
-    });
+    }
+
+    if (info.charge) info.charge = parseFloat(info.charge.toFixed(2));
+
+    return info;
+  };
+
+  const getDatesForXAxis = (): any => {
+    let { fromMonth, toMonth, year } = props.dates;
+    fromMonth = parseInt(fromMonth) - 1;
+    toMonth = parseInt(toMonth) - 1;
+    year = parseInt(year);
+
+    const startDate = new Date(year, fromMonth, 1);
+    const endDate = new Date(year, toMonth, 1);
+
+    const chartData: any[] = [];
+
+    let dummy = new Date(year, fromMonth, 0);
+    for (let i = 0; i < (+endDate - +startDate) / (60 * 60 * 24 * 1000); i++) {
+      dummy.setDate(dummy.getDate() + 1);
+
+      const obj: any = {
+        date: dummy.getTime(),
+        dateObj: new Date(dummy),
+      };
+      const stringifiedDate: string = `${
+        dummy.getMonth() + 1
+      }/${dummy.getDate()}/${dummy.getFullYear()}`;
+
+      const { charge, descr } = putTransactionIn(stringifiedDate);
+      obj.CHARGE = charge;
+      obj.DESCR = descr.join(" | ");
+      //console.log(charge + "\n");
+
+      chartData.push(obj);
+    }
+
+    return chartData;
   };
 
   const tickToDate = (tickVal: string) => {
@@ -67,26 +122,20 @@ function Chart(props: any) {
     <LineChart
       width={900}
       height={300}
-      data={props.data}
+      data={getDatesForXAxis()}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      onClick={handleClick}
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis
-        dataKey="newPOST_DATE"
+        dataKey="date"
         interval={"preserveStartEnd"}
         tickFormatter={tickToDate}
       />
       <YAxis domain={[0, num]} />
       <Tooltip />
-      <ReferenceLine x={props.currentSelection} stroke="#fff" label="" />
+      <ReferenceLine x={0} stroke="#fff" label="" />
       <Legend />
-      <Line
-        type="monotone"
-        dataKey="CHARGE"
-        stroke="#FF7F7F"
-        onMouseDown={handleClick}
-      />
+      <Line type="monotone" dataKey="CHARGE" stroke="#FF7F7F" />
       {/*#8884d8*/}
     </LineChart>
   );
