@@ -9,7 +9,6 @@ import {
   ReferenceLine,
 } from "recharts";
 import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
-// import { Transaction } from "../types";
 import React from "react";
 
 interface chargeInfo {
@@ -17,30 +16,13 @@ interface chargeInfo {
   descr: string[];
 }
 
-/* 
-To get all dates within the data:
-- First read through data to see which dates are within the date
-- Combine duplicates, and add in $0 charges for the empty dates
-- Don't mess up the display data, this will fuck up however the indices are read for the props.currentSelection
-- Make sure this is worth implementing. 
-*/
-
-// WE'RE USING POST DATE
-// const getDate = (date: string) => {
-//   return Date.parse(date);
-// };
-/* const getAllDates = (firstDate: string): number[] => {
-  var month = parseInt(firstDate.split("/")[0]);
-  var year = parseInt(firstDate.split("/")[2]);
-  return Array.from(
-    { length: new Date(year, month, 0).getDate() - 1 },
-    (_, i) => Date.parse(new Date(year, month, i + 1).toLocaleDateString())
-  );
-}; */
+// Main
 
 function Chart(props: any) {
   const data: any[] = spliceDataBasedOnDate(props.dates);
-  console.log(data);
+
+  // Functions
+
   const getLargestPurchase = (): number => {
     let max: number = 0;
     for (let trans of data) {
@@ -59,8 +41,8 @@ function Chart(props: any) {
     };
 
     const copy = Array.from(data);
-    console.log(copy, stringifiedDate);
 
+    // Transaction date is the date we will use for all transactions.
     for (const trans of copy) {
       const transactionDate: string = trans.TRANS_DATE.split("/")
         .map((ele: string) => parseInt(ele))
@@ -103,7 +85,6 @@ function Chart(props: any) {
       const { charge, descr } = putTransactionIn(stringifiedDate);
       obj.CHARGE = charge;
       obj.DESCR = descr.join(" | ");
-      //console.log(charge + "\n");
 
       chartData.push(obj);
     }
@@ -115,8 +96,6 @@ function Chart(props: any) {
     var date = new Date(parseInt(tickVal)).toLocaleDateString();
     return date;
   };
-
-  const num = getLargestPurchase();
 
   return (
     <LineChart
@@ -131,11 +110,11 @@ function Chart(props: any) {
         interval={"preserveStartEnd"}
         tickFormatter={tickToDate}
       />
-      <YAxis domain={[0, num]} />
+      <YAxis domain={[0, getLargestPurchase()]} />
       <Tooltip />
       <ReferenceLine x={0} stroke="#fff" label="" />
       <Legend />
-      <Line type="monotone" dataKey="CHARGE" stroke="#FF7F7F" />
+      <Line type="monotone" dataKey="CHARGE" stroke="#FF7F7F" dot={false} />
       {/*#8884d8*/}
     </LineChart>
   );

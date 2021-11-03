@@ -1,40 +1,19 @@
 import { ResponsiveContainer } from "recharts";
 // import allData from "../algorithm/rtnData";
 import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
+import initialDate from "../algorithm/initialDate";
 import { DateTime } from "../types";
 import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";
 import InfoDisplay from "../components/InfoDisplay";
 import React from "react";
 
-// Put this in a separate script to clean up
-const initDate = () => {
-  const current = new Date()
-    .toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-    })
-    .split("/");
-  const prevMonth =
-    parseInt(current[0]) - 1 < 1 ? 12 : parseInt(current[0]) - 1;
-
-  return {
-    fromMonth: prevMonth,
-    toMonth: parseInt(current[0]),
-    year: parseInt(current[1]),
-  } as DateTime;
-};
-
 function AppView() {
   // States
   // const [currentTrans, setCurrentTrans] = React.useState({ test: "test" });
   const [curSelFromDisplay, setCurSelFromDisplay] = React.useState(-1);
   const [name, setName] = React.useState("Camryn");
-  const [dates, setDates] = React.useState(initDate());
-
-  // React.useEffect(() => {
-  //   console.log(currentTrans);
-  // });
+  const [dates, setDates] = React.useState(initialDate);
 
   // Const variables that are based on data to be displayed
   const totalExp = () => {
@@ -42,10 +21,7 @@ function AppView() {
     for (let trans of spliceDataBasedOnDate(dates)) {
       sum += parseFloat(trans.CHARGE);
     }
-    return sum.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    return sum.toFixed(2);
   };
   const returnBold = (inner: string | number) => (
     <b className="report-bold">{inner}</b>
@@ -109,11 +85,7 @@ function AppView() {
       <div className="App-chart-n-rep-parent">
         <div className="chart-n-rep-child">
           <ResponsiveContainer width="50%" height="100%">
-            <Chart
-              dates={dates}
-              // setCurrentTrans={setCurrentTrans}
-              currentSelection={curSelFromDisplay}
-            />
+            <Chart dates={dates} currentSelection={curSelFromDisplay} />
           </ResponsiveContainer>
           <InfoDisplay
             data={spliceDataBasedOnDate(dates)}

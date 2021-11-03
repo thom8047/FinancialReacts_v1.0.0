@@ -9,9 +9,6 @@ interface Props {
 
 function InfoDisplay(props: Props): any {
   const [sum, setSum] = React.useState(0);
-  React.useEffect(() => {
-    console.log(sum);
-  });
 
   const handleClearClick = () => {
     setSum(0);
