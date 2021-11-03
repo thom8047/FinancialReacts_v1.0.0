@@ -1,34 +1,46 @@
 import "../styles/Display.css";
 import React, { Dispatch, SetStateAction } from "react";
-import { Transaction } from "../types";
 
 interface Props {
-  data: Transaction[];
+  data: any[];
   setCurrentSelection: Dispatch<SetStateAction<number>>;
 }
 
 function InfoDisplay(props: Props): any {
   const [sum, setSum] = React.useState(0);
-
+  const [data, setData] = React.useState(Array.from(props.data));
   const handleClearClick = () => {
     setSum(0);
-    props.data.forEach((value: Transaction, index: number) => {
+    data.forEach((value: any, index: number) => {
       var ele = [
         document.getElementById(`Tag${index}`),
         document.getElementById(`Descr${index}`),
       ] as HTMLElement[];
-      ele[0].setAttribute("data-selected", "false");
-      ele[0].style.color = "#fff";
-      ele[1].setAttribute("data-selected", "false");
-      ele[1].style.color = "#fff";
+      if (ele[0] && ele[1]) {
+        ele[0].setAttribute("data-selected", "false");
+        ele[0].style.color = "#fff";
+        ele[1].setAttribute("data-selected", "false");
+        ele[1].style.color = "#fff";
+      }
     });
   };
 
+  // eslint-disable-next-line
+  const clear = React.useCallback(handleClearClick, []);
+
+  React.useEffect(() => {
+    // When props.data changes, keep shit updated, changing the key only updates our css
+    setData(props.data);
+    clear();
+  }, [props.data, clear]);
+
+  const listOfNames: string[] = ["All", "KING SOOPERS", "FUEL", "WINE", "AMZN"];
+
   const getDataObj = (): JSX.Element => {
     let chargeList: JSX.Element[] = [];
-    props.data.forEach((value: Transaction, index: number) => {
+    data.forEach((value: any, index: number) => {
       const handleHoverIn = () => {
-        props.setCurrentSelection(index);
+        // props.setCurrentSelection(index);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
@@ -98,6 +110,46 @@ function InfoDisplay(props: Props): any {
     return (
       <div>
         <div className="display">
+          <div id="tabs-parent" className="priceInfo-Tabs">
+            {listOfNames.map((value: string) => {
+              let className = "tabs";
+              if (value === "All") {
+                className += "-selected";
+              }
+
+              const handleTabChange = () => {
+                setSum(0);
+                handleClearClick();
+                const parent = document.getElementById(
+                  "tabs-parent"
+                ) as HTMLElement;
+                for (let i = 0; i < parent.children.length; i++) {
+                  parent.children[i].setAttribute("class", "tabs");
+                }
+                const self = document.getElementById(value);
+                self?.setAttribute("class", "tabs-selected");
+                if (value === "All") {
+                  setData(props.data);
+                } else {
+                  setData(
+                    props.data.filter((trans: any) =>
+                      trans.DESCR.toLowerCase().includes(value.toLowerCase())
+                    )
+                  );
+                }
+              };
+              return (
+                <span
+                  key={`${value}${props.data.length}`}
+                  className={className}
+                  id={value}
+                  onClick={handleTabChange}
+                >
+                  {value}
+                </span>
+              );
+            })}
+          </div>
           <div className="priceInfo">{chargeList}</div>
         </div>
         <div className="priceSum">

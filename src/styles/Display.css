@@ -25,7 +25,7 @@
 .priceTag {
   user-select: none;
   width: 70px;
-  border-right: 1px solid #fff;
+  border-right: 1px solid darkgray;
   text-align: right;
   padding-right: 5px;
   float: left;
@@ -52,6 +52,22 @@
   cursor: pointer;
   float: right;
 }
-/* .priceInfo {
 
-} */
+.priceInfo-Tabs {
+  border-bottom: 1px solid darkgray;
+}
+
+.tabs {
+  color: #fff;
+  padding: 0px 10px;
+  cursor: pointer;
+  border-right: 1px solid darkgray;
+}
+
+.tabs-selected {
+  color: #fff;
+  padding: 0px 10px;
+  cursor: pointer;
+  border-right: 1px solid darkgray;
+  background-color: lightgrey;
+}
