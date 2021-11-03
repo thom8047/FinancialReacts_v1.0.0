@@ -41,6 +41,13 @@
   color: var(--nonHover);
 }
 
+.combinedDataDisplay {
+  color: var(--nonHover);
+  position: absolute;
+  margin: 0 50%;
+  width: 50%;
+}
+
 .clearState {
   cursor: pointer;
   float: right;
