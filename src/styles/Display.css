@@ -4,6 +4,7 @@
 
 .display {
   position: absolute;
+  z-index: 3;
   overflow-y: scroll;
   overflow-x: hidden;
   height: 30%;
