@@ -13,6 +13,13 @@
 .App {
   text-align: left;
 }
+.custom-tooltip {
+  z-index: 5;
+  border: 1px solid darkgray;
+  color: #fff;
+  background-color: #5e6679;
+  padding: 10px 20px;
+}
 
 .App-header {
   width: 100%;

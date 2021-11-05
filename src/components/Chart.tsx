@@ -15,6 +15,11 @@ interface chargeInfo {
   charge: number;
   descr: string[];
 }
+interface tooltipProps {
+  active: boolean;
+  label: string | number;
+  payload: any[];
+}
 
 // Main
 
@@ -27,11 +32,15 @@ function Chart(props: any) {
     let max: number = 0;
     for (let trans of data) {
       if (parseFloat(trans.CHARGE) > max) {
-        max = parseFloat(trans.CHARGE);
+        max = parseFloat((parseFloat(trans.CHARGE) + 20).toFixed(2));
       }
     }
 
     return max;
+  };
+
+  const getReadableDateFromDateObj = (date: Date) => {
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   };
 
   const putTransactionIn = (stringifiedDate: string): chargeInfo => {
@@ -50,7 +59,7 @@ function Chart(props: any) {
 
       if (transactionDate === stringifiedDate) {
         info.charge += parseFloat(trans.CHARGE);
-        info.descr.push(trans.DESCR);
+        info.descr.push(`${trans.DESCR}^%$${trans.CHARGE}`);
       }
     }
 
@@ -78,18 +87,46 @@ function Chart(props: any) {
         date: dummy.getTime(),
         dateObj: new Date(dummy),
       };
-      const stringifiedDate: string = `${
-        dummy.getMonth() + 1
-      }/${dummy.getDate()}/${dummy.getFullYear()}`;
+      const stringifiedDate: string = getReadableDateFromDateObj(dummy);
 
       const { charge, descr } = putTransactionIn(stringifiedDate);
       obj.CHARGE = charge;
-      obj.DESCR = descr.join(" | ");
+      obj.DESCR = descr.join(`|^`);
 
       chartData.push(obj);
     }
 
     return chartData;
+  };
+
+  const CustomTooltip = ({ active, payload, label }: tooltipProps) => {
+    if (active && payload && payload.length) {
+      return payload[0].value > 0 ? (
+        <div>
+          <div className="custom-tooltip">
+            DATE -{"> "}
+            {getReadableDateFromDateObj(new Date(label))}
+          </div>
+          {payload[0].payload.DESCR.split("|^").map((descr: string) => {
+            return (
+              <div key={descr} className="custom-tooltip">
+                <div>{descr.split("^%$")[0]}</div>
+                <div>$ {descr.split("^%$")[1]}</div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div>
+          <div className="custom-tooltip">
+            DATE -{"> "}
+            {getReadableDateFromDateObj(new Date(label))}
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   const tickToDate = (tickVal: string) => {
@@ -111,7 +148,10 @@ function Chart(props: any) {
         tickFormatter={tickToDate}
       />
       <YAxis domain={[0, getLargestPurchase()]} />
-      <Tooltip />
+      <Tooltip
+        content={<CustomTooltip active={false} label={""} payload={[]} />}
+        // position={{ x: 1000, y: -150 }}
+      />
       <ReferenceLine x={0} stroke="#fff" label="" />
       <Legend />
       <Line type="monotone" dataKey="CHARGE" stroke="#FF7F7F" dot={false} />
