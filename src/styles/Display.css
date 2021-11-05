@@ -78,6 +78,9 @@
 
 .priceInfo-Tabs {
   border-bottom: 1px solid darkgray;
+  background-color: #444;
+  position: sticky;
+  top: 0;
 }
 
 .tabs {
@@ -88,9 +91,8 @@
 }
 
 .tabs-selected {
-  color: #fff;
+  color: #ff7f7f;
   padding: 0px 10px;
   cursor: pointer;
   border-right: 1px solid darkgray;
-  background-color: lightgrey;
 }
