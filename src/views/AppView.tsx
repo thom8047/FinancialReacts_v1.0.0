@@ -11,7 +11,6 @@ import React from "react";
 function AppView() {
   // States
   // const [currentTrans, setCurrentTrans] = React.useState({ test: "test" });
-  const [curSelFromDisplay, setCurSelFromDisplay] = React.useState(-1);
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initialDate);
 
@@ -85,12 +84,9 @@ function AppView() {
       <div className="App-chart-n-rep-parent">
         <div className="chart-n-rep-child">
           <ResponsiveContainer width="50%" height="100%">
-            <Chart dates={dates} currentSelection={curSelFromDisplay} />
+            <Chart dates={dates} />
           </ResponsiveContainer>
-          <InfoDisplay
-            data={spliceDataBasedOnDate(dates)}
-            setCurrentSelection={setCurSelFromDisplay}
-          />
+          <InfoDisplay data={spliceDataBasedOnDate(dates)} />
         </div>
         <div className="chart-n-rep-child">
           <div className="report">

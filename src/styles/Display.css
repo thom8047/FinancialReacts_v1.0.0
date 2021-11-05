@@ -25,7 +25,7 @@
 .priceTag {
   user-select: none;
   width: 70px;
-  border-right: 1px solid #fff;
+  border-right: 1px solid darkgray;
   text-align: right;
   padding-right: 5px;
   float: left;
@@ -33,6 +33,29 @@
 
   color: var(--nonHover);
 }
+
+.priceDescr-selected {
+  user-select: none;
+  width: 80%;
+  text-align: right;
+  float: right;
+  padding-right: 5px;
+  padding-top: 15px;
+
+  color: #ff7f7f;
+}
+.priceTag-selected {
+  user-select: none;
+  width: 70px;
+  border-right: 1px solid darkgray;
+  text-align: right;
+  padding-right: 5px;
+  float: left;
+  padding-top: 15px;
+
+  color: #ff7f7f;
+}
+
 .priceSum {
   position: absolute;
   user-select: none;
@@ -52,6 +75,24 @@
   cursor: pointer;
   float: right;
 }
-/* .priceInfo {
 
-} */
+.priceInfo-Tabs {
+  border-bottom: 1px solid darkgray;
+  background-color: #444;
+  position: sticky;
+  top: 0;
+}
+
+.tabs {
+  color: #fff;
+  padding: 0px 10px;
+  cursor: pointer;
+  border-right: 1px solid darkgray;
+}
+
+.tabs-selected {
+  color: #ff7f7f;
+  padding: 0px 10px;
+  cursor: pointer;
+  border-right: 1px solid darkgray;
+}
