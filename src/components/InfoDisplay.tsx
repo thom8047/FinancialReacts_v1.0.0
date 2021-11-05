@@ -6,11 +6,16 @@ interface Props {
   setCurrentSelection: Dispatch<SetStateAction<number>>;
 }
 
+const initItems: string[] = [];
+
 function InfoDisplay(props: Props): any {
   const [sum, setSum] = React.useState(0);
+  const [getSelectedItems, setSelectedItems] = React.useState(initItems);
   const [data, setData] = React.useState(Array.from(props.data));
+
   const handleClearClick = () => {
     setSum(0);
+    setSelectedItems([]);
     data.forEach((value: any, index: number) => {
       var ele = [
         document.getElementById(`Tag${index}`),
@@ -30,8 +35,9 @@ function InfoDisplay(props: Props): any {
 
   React.useEffect(() => {
     // When props.data changes, keep shit updated, changing the key only updates our css
-    setData(props.data);
+    console.log("RE-RENDER");
     clear();
+    setData(props.data);
   }, [props.data, clear]);
 
   const listOfNames: string[] = ["All", "KING SOOPERS", "FUEL", "WINE", "AMZN"];
@@ -45,10 +51,9 @@ function InfoDisplay(props: Props): any {
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
-        if (ele[0].getAttribute("data-selected") === "false") {
-          ele[0].style.color = "#ff7f7f";
-          ele[1].style.color = "#ff7f7f";
-        }
+        ele.forEach((value: HTMLElement) => {
+          value.style.textDecoration = "underline";
+        });
       };
       const handleHoverOut = () => {
         props.setCurrentSelection(-1);
@@ -56,10 +61,10 @@ function InfoDisplay(props: Props): any {
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
-        if (ele[0].getAttribute("data-selected") === "false") {
-          ele[0].style.color = "#fff";
-          ele[1].style.color = "#fff";
-        }
+
+        ele.forEach((value: HTMLElement) => {
+          value.style.textDecoration = "unset";
+        });
       };
       const handleClick = () => {
         var ele = [
@@ -69,35 +74,59 @@ function InfoDisplay(props: Props): any {
         var int = parseFloat(value.CHARGE);
         if (ele[0].getAttribute("data-selected") === "true") {
           int *= -1;
-          ele[0].setAttribute("data-selected", "false");
-          ele[1].setAttribute("data-selected", "false");
-          ele[0].style.color = "#fff";
-          ele[1].style.color = "#fff";
+          ele.forEach((value: HTMLElement) => {
+            const class_name = value.getAttribute("class") || "";
+            value.setAttribute("data-selected", "false");
+            value.setAttribute("class", class_name.split("-selected")[0]);
+            value.style.color = "#fff";
+          });
+
+          // Remove from state
+          setSelectedItems((oldState) =>
+            oldState.filter((ids) => !(ids === value.REF_ID))
+          );
         } else {
-          ele[0].setAttribute("data-selected", "true");
-          ele[1].setAttribute("data-selected", "true");
-          ele[0].style.color = "#ff7f7f";
-          ele[1].style.color = "#ff7f7f";
+          ele.forEach((value: HTMLElement) => {
+            const class_name = value.getAttribute("class") || "";
+            value.setAttribute("data-selected", "true");
+            value.setAttribute("class", `${class_name}-selected`);
+            value.style.color = "#ff7f7f";
+          });
+
+          // add to state
+          setSelectedItems((oldState) => [...oldState, value.REF_ID]);
         }
         setSum(parseFloat((sum + int).toFixed(2)));
       };
       chargeList.push(
         <div key={value.REF_ID}>
           <span
-            className="priceTag"
+            className={
+              getSelectedItems.includes(value.REF_ID)
+                ? "priceTag-selected"
+                : "priceTag"
+            }
             id={"Tag" + index}
             onClick={handleClick}
-            data-selected={false}
+            data-selected={
+              getSelectedItems.includes(value.REF_ID) ? true : false
+            }
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
             {value.CHARGE}
           </span>
           <span
-            className="priceDescr"
+            className={
+              getSelectedItems.includes(value.REF_ID)
+                ? "priceDescr-selected"
+                : "priceDescr"
+            }
             id={"Descr" + index}
             onClick={handleClick}
-            data-selected={false}
+            data-selected={
+              getSelectedItems.includes(value.REF_ID) ? true : false
+            }
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
@@ -118,8 +147,6 @@ function InfoDisplay(props: Props): any {
               }
 
               const handleTabChange = () => {
-                setSum(0);
-                handleClearClick();
                 const parent = document.getElementById(
                   "tabs-parent"
                 ) as HTMLElement;

@@ -33,6 +33,29 @@
 
   color: var(--nonHover);
 }
+
+.priceDescr-selected {
+  user-select: none;
+  width: 80%;
+  text-align: right;
+  float: right;
+  padding-right: 5px;
+  padding-top: 15px;
+
+  color: #ff7f7f;
+}
+.priceTag-selected {
+  user-select: none;
+  width: 70px;
+  border-right: 1px solid darkgray;
+  text-align: right;
+  padding-right: 5px;
+  float: left;
+  padding-top: 15px;
+
+  color: #ff7f7f;
+}
+
 .priceSum {
   position: absolute;
   user-select: none;
