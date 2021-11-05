@@ -198,8 +198,12 @@ function InfoDisplay(props: Props): any {
   return getDataObj();
 }
 
-function isEqual() {
-  return true;
+function isEqual(prevProps: Props, nextProps: Props) {
+  if (prevProps.data.length === nextProps.data.length) {
+    return true;
+  }
+
+  return false;
 }
 
 export default React.memo(InfoDisplay, isEqual);
