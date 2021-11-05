@@ -46,7 +46,7 @@ function InfoDisplay(props: Props): any {
     let chargeList: JSX.Element[] = [];
     data.forEach((value: any, index: number) => {
       const handleHoverIn = () => {
-        // props.setCurrentSelection(index);
+        props.setCurrentSelection(index);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
@@ -198,4 +198,8 @@ function InfoDisplay(props: Props): any {
   return getDataObj();
 }
 
-export default InfoDisplay;
+function isEqual() {
+  return true;
+}
+
+export default React.memo(InfoDisplay, isEqual);
