@@ -1,9 +1,8 @@
 import "../styles/Display.css";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 interface Props {
   data: any[];
-  setCurrentSelection: Dispatch<SetStateAction<number>>;
 }
 
 const initItems: string[] = [];
@@ -46,7 +45,6 @@ function InfoDisplay(props: Props): any {
     let chargeList: JSX.Element[] = [];
     data.forEach((value: any, index: number) => {
       const handleHoverIn = () => {
-        props.setCurrentSelection(index);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
@@ -56,7 +54,6 @@ function InfoDisplay(props: Props): any {
         });
       };
       const handleHoverOut = () => {
-        props.setCurrentSelection(-1);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
@@ -198,12 +195,4 @@ function InfoDisplay(props: Props): any {
   return getDataObj();
 }
 
-function isEqual(prevProps: Props, nextProps: Props) {
-  if (prevProps.data.length === nextProps.data.length) {
-    return true;
-  }
-
-  return false;
-}
-
-export default React.memo(InfoDisplay, isEqual);
+export default InfoDisplay;
