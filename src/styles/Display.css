@@ -84,6 +84,7 @@
 }
 
 .tabs {
+  user-select: none;
   color: #fff;
   padding: 0px 10px;
   cursor: pointer;
@@ -91,6 +92,7 @@
 }
 
 .tabs-selected {
+  user-select: none;
   color: #ff7f7f;
   padding: 0px 10px;
   cursor: pointer;
