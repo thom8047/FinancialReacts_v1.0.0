@@ -20,13 +20,18 @@ function DatePicker(props: Props): JSX.Element {
 
   return (
     <span>
-      <ReactDatePicker
-        selected={new Date(Date.parse(defaultValue))}
-        onChange={handleSubmit}
-        dateFormat="MM/yyyy"
-        showMonthYearPicker
-        showFullMonthYearPicker
-      />
+      <span style={{ padding: "10px" }}>
+        {props.text === "f" ? "FROM: " : "TO: "}
+      </span>
+      <span style={{ display: "inline-block" }}>
+        <ReactDatePicker
+          selected={new Date(Date.parse(defaultValue))}
+          onChange={handleSubmit}
+          dateFormat="MM/yyyy"
+          showMonthYearPicker
+          showFullMonthYearPicker
+        />
+      </span>
     </span>
   );
 }
