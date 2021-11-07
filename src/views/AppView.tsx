@@ -2,9 +2,8 @@
 import React from "react";
 import { ResponsiveContainer } from "recharts";
 // Modularized scripts
-import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
-import rtnDataBasedOnName from "../algorithm/rtnDataBasedOnName";
 import initialDate from "../algorithm/initialDate";
+import rtnFilteredNamedData from "../algorithm/rtnFilteredNamedData";
 // Components
 import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";
@@ -12,45 +11,10 @@ import InfoDisplay from "../components/InfoDisplay";
 import Report from "../components/Report";
 import Header from "../components/Header";
 
-interface Parser {
-  chargesOnly?: boolean;
-  transferWithinAccountsRemoved?: boolean;
-}
-
 function AppView() {
   // States
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initialDate);
-
-  const namedData = (props: Parser): any[] => {
-    // Order will matter here, first filter charges or it doesn't matter, then take out specific shit
-    let allNamedData = spliceDataBasedOnDate(
-      dates,
-      rtnDataBasedOnName(name.toLowerCase())
-    );
-    if (props.chargesOnly) {
-      allNamedData = allNamedData.filter((trans) => {
-        if (trans.CHARGE) {
-          return true;
-        }
-      });
-    }
-    if (props.transferWithinAccountsRemoved) {
-      allNamedData = allNamedData.filter((trans) => {
-        if (
-          /* We want to exclude all our money movement between personal accounts */
-          trans.DESCR.includes("Recurring Transfer to") ||
-          trans.DESCR.includes("Online Transfer Ref") ||
-          trans.DESCR.includes("Save As You Go Transfer Debit to")
-        ) {
-          return false;
-        }
-        return true;
-      });
-    }
-
-    return allNamedData;
-  };
 
   // Const event handlers
   const handleNameChange = () => {
@@ -99,26 +63,33 @@ function AppView() {
           <ResponsiveContainer width="50%" height="100%">
             <Chart
               dates={dates}
-              data={namedData({
+              data={rtnFilteredNamedData({
                 chargesOnly: false,
                 transferWithinAccountsRemoved: true,
+                name: name.toLowerCase(),
+                dates: dates,
               })}
             />
           </ResponsiveContainer>
           <InfoDisplay
-            data={namedData({
+            data={rtnFilteredNamedData({
               chargesOnly: true,
               transferWithinAccountsRemoved: true,
+              name: name.toLowerCase(),
+              dates: dates,
             })}
           />
         </div>
         <div className="chart-n-rep-child">
           <Report
             dates={dates}
-            data={namedData({
+            data={rtnFilteredNamedData({
               chargesOnly: true,
               transferWithinAccountsRemoved: true,
+              name: name.toLowerCase(),
+              dates: dates,
             })}
+            name={name.toLowerCase()}
           />
         </div>
       </div>

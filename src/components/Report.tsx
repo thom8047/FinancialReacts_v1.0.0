@@ -1,10 +1,11 @@
 import React from "react";
-import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
+import rtnFilteredNamedData from "../algorithm/rtnFilteredNamedData";
 import { DateTime } from "../types";
 
 interface Props {
   dates: DateTime;
   data: any[];
+  name: string;
 }
 
 function Report(props: Props) {
@@ -12,7 +13,9 @@ function Report(props: Props) {
   const totalExp = (obj: any[]) => {
     let sum: number = 0;
     for (let trans of obj) {
-      sum += parseFloat(trans.CHARGE);
+      if (trans.CHARGE) {
+        sum += parseFloat(trans.CHARGE);
+      }
     }
     return sum.toFixed(2);
   };
@@ -43,24 +46,28 @@ function Report(props: Props) {
     ];
     const fM = props.dates.fromMonth - 1 === 0 ? 12 : props.dates.fromMonth - 1,
       fY = fM === 12 ? props.dates.fromYear - 1 : props.dates.fromYear;
-    const prevMonthExpData = spliceDataBasedOnDate({
-      fromYear: fY,
-      fromMonth: fM,
-      toYear: props.dates.fromYear,
-      toMonth: props.dates.fromMonth,
+
+    const prevMonthExpData = rtnFilteredNamedData({
+      chargesOnly: true,
+      transferWithinAccountsRemoved: true,
+      name: props.name,
+      dates: {
+        fromYear: fY,
+        fromMonth: fM,
+        toYear: props.dates.fromYear,
+        toMonth: props.dates.fromMonth,
+      },
     });
     let prevMonthExp: number = parseFloat(totalExp(prevMonthExpData)),
       monthExp: number = parseFloat(totalExp(props.data)),
-      percent: string | number = ((prevMonthExp - monthExp) / monthExp) * 100,
+      percent: string | number = (monthExp / prevMonthExp - 1) * 100,
       direction: string = "Increase";
 
-    if (percent > 0) {
-      percent = percent.toFixed(0);
+    if (percent >= 1) {
+      percent = percent.toFixed(2);
     } else {
-      // switch em
-      console.log("decr");
       direction = "Decrease";
-      percent = (((monthExp - prevMonthExp) / monthExp) * 100).toFixed(0);
+      percent = percent.toFixed(2);
     }
 
     return (

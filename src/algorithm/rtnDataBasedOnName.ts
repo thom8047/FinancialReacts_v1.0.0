@@ -5,7 +5,6 @@ let parsedData: any = parseData();
 
 function rtnData(name: string): any[] {
   const parsedWho = JSON.parse(JSON.stringify(who));
-  console.log(parsedWho);
   let allData: any[] = [];
 
   Object.entries(parsedData).forEach(([k, v]) => {

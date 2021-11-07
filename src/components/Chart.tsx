@@ -61,7 +61,7 @@ function Chart(props: any) {
           info.charge += parseFloat(trans.CHARGE);
           info.descr.push(`${trans.DESCR}^%$${trans.CHARGE}`);
         } else if (trans.INCOME) {
-          console.log(trans);
+          // INCOME LOGIC
         }
       }
     }
