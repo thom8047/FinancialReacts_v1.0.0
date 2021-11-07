@@ -25,7 +25,7 @@ interface tooltipProps {
 
 function Chart(props: any) {
   const data: any[] = spliceDataBasedOnDate(props.dates);
-
+  console.log(data);
   // Functions
 
   const getLargestPurchase = (): number => {

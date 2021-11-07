@@ -2,7 +2,7 @@ import { ResponsiveContainer } from "recharts";
 // import allData from "../algorithm/rtnData";
 import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
 import initialDate from "../algorithm/initialDate";
-import { DateTime } from "../types";
+// import { DateTime } from "../types";
 import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";
 import InfoDisplay from "../components/InfoDisplay";
@@ -13,6 +13,10 @@ function AppView() {
   // const [currentTrans, setCurrentTrans] = React.useState({ test: "test" });
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initialDate);
+
+  /*   React.useEffect(() => {
+    console.log(dates);
+  }, [dates]); */
 
   // Const variables that are based on data to be displayed
   const totalExp = () => {
@@ -31,20 +35,21 @@ function AppView() {
     setName(() => (name === "Camryn" ? "Kyle" : "Camryn"));
   };
   const handleDateChange = (text: string, value: string) => {
-    let nextState: DateTime = {
-      fromMonth: dates.fromMonth,
-      toMonth: dates.toMonth,
-      year: dates.year,
-    };
-    if (text === "FROM: ") {
-      nextState.fromMonth = parseInt(value);
-    } else if (text === "TO: ") {
-      nextState.toMonth = parseInt(value);
-    } else if (text === "YEAR: ") {
-      nextState.year = parseInt(value);
+    if (text === "f") {
+      let [m, y] = value.split("/");
+      setDates((oldDates) => ({
+        ...oldDates,
+        fromMonth: parseInt(m),
+        fromYear: parseInt(y),
+      }));
+    } else if (text === "t") {
+      let [m, y] = value.split("/");
+      setDates((oldDates) => ({
+        ...oldDates,
+        toMonth: parseInt(m),
+        toYear: parseInt(y),
+      }));
     }
-
-    setDates(nextState);
   };
 
   return (
@@ -60,23 +65,14 @@ function AppView() {
         {[
           <DatePicker
             key={"from"}
-            text={"FROM: "}
-            date_type={0}
-            defaultValue={dates.fromMonth}
+            text={"f"}
+            defaultValue={`${dates.fromYear}/${dates.fromMonth}`}
             onDateChange={handleDateChange}
           />,
           <DatePicker
             key={"to"}
-            text={"TO: "}
-            date_type={0}
-            defaultValue={dates.toMonth}
-            onDateChange={handleDateChange}
-          />,
-          <DatePicker
-            key={"year"}
-            text={"YEAR: "}
-            date_type={1}
-            defaultValue={dates.year}
+            text={"t"}
+            defaultValue={`${dates.toYear}/${dates.toMonth}`}
             onDateChange={handleDateChange}
           />,
         ]}

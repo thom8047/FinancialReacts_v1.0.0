@@ -1,38 +1,32 @@
 import React from "react";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Props {
   text: string;
-  date_type: number;
-  defaultValue: number;
+  defaultValue: string;
   onDateChange: (text: string, value: string) => void;
 }
 
 function DatePicker(props: Props): JSX.Element {
-  const { text, date_type, defaultValue } = props;
+  const { text, defaultValue } = props;
 
-  const handleSubmit = (event: any) => {
-    if (event.key === "Enter") {
-      if (parseInt(event.currentTarget.value)) {
-        if (date_type === 0) {
-          if (event.currentTarget.value > 0 && event.currentTarget.value < 13) {
-            props.onDateChange(text, event.currentTarget.value);
-          }
-        } else if (date_type === 1) {
-          if (
-            event.currentTarget.value >= 2000 &&
-            event.currentTarget.value <= 2050
-          ) {
-            props.onDateChange(text, event.currentTarget.value);
-          }
-        }
-      }
-    }
+  const handleSubmit = (date: Date) => {
+    // M/Y format
+    const value = `${date.getMonth() + 1}/${date.getFullYear()}`;
+    // console.log(value);
+    props.onDateChange(text, value);
   };
 
   return (
     <span>
-      {text}
-      <input onKeyUp={handleSubmit} defaultValue={defaultValue}></input>
+      <ReactDatePicker
+        selected={new Date(Date.parse(defaultValue))}
+        onChange={handleSubmit}
+        dateFormat="MM/yyyy"
+        showMonthYearPicker
+        showFullMonthYearPicker
+      />
     </span>
   );
 }
