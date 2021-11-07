@@ -69,17 +69,18 @@ function Chart(props: any) {
   };
 
   const getDatesForXAxis = (): any => {
-    let { fromMonth, toMonth, year } = props.dates;
+    let { fromMonth, toMonth, fromYear, toYear } = props.dates;
     fromMonth = parseInt(fromMonth) - 1;
+    fromYear = parseInt(fromYear);
     toMonth = parseInt(toMonth) - 1;
-    year = parseInt(year);
+    toYear = parseInt(toYear);
 
-    const startDate = new Date(year, fromMonth, 1);
-    const endDate = new Date(year, toMonth, 1);
+    const startDate = new Date(fromYear, fromMonth, 1);
+    const endDate = new Date(toYear, toMonth, 1);
 
     const chartData: any[] = [];
 
-    let dummy = new Date(year, fromMonth, 0);
+    let dummy = new Date(fromYear, fromMonth, 0);
     for (let i = 0; i < (+endDate - +startDate) / (60 * 60 * 24 * 1000); i++) {
       dummy.setDate(dummy.getDate() + 1);
 
