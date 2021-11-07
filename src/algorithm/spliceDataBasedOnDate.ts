@@ -10,7 +10,7 @@ function spliceDataBasedOnDate(dates: DateTime, namedData?: any[]): any[] {
     const post_date = Date.parse(transaction.TRANS_DATE);
     const from_date = Date.parse(`${fromYear}/${fromMonth}`);
     const to_date = Date.parse(`${toYear}/${toMonth}`);
-    if (post_date >= from_date && post_date <= to_date) {
+    if (post_date >= from_date && post_date < to_date) {
       brokenData.push(transaction);
     }
   });
