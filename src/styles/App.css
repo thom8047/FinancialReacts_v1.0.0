@@ -15,9 +15,9 @@
 }
 .custom-tooltip {
   z-index: 5;
-  border: 1px solid darkgray;
+  border: 1px solid #fff;
   color: #fff;
-  background-color: #5e6679;
+  background-color: #444;
   padding: 10px 20px;
 }
 
