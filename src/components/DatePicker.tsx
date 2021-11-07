@@ -14,7 +14,6 @@ function DatePicker(props: Props): JSX.Element {
   const handleSubmit = (date: Date) => {
     // M/Y format
     const value = `${date.getMonth() + 1}/${date.getFullYear()}`;
-    // console.log(value);
     props.onDateChange(text, value);
   };
 

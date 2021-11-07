@@ -14,10 +14,6 @@ function AppView() {
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initialDate);
 
-  /*   React.useEffect(() => {
-    console.log(dates);
-  }, [dates]); */
-
   // Const variables that are based on data to be displayed
   const totalExp = () => {
     let sum: number = 0;
