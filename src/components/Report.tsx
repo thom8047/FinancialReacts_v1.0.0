@@ -4,11 +4,10 @@ import { DateTime } from "../types";
 
 interface Props {
   dates: DateTime;
+  data: any[];
 }
 
 function Report(props: Props) {
-  const data = spliceDataBasedOnDate(props.dates);
-
   // Const variables that are based on data to be displayed
   const totalExp = (obj: any[]) => {
     let sum: number = 0;
@@ -19,7 +18,7 @@ function Report(props: Props) {
   };
   const getLargestPurchase = (): number => {
     let max: number = 0;
-    for (let trans of data) {
+    for (let trans of props.data) {
       if (parseFloat(trans.CHARGE) > max) {
         max = parseFloat(parseFloat(trans.CHARGE).toFixed(2));
       }
@@ -51,7 +50,7 @@ function Report(props: Props) {
       toMonth: props.dates.fromMonth,
     });
     let prevMonthExp: number = parseFloat(totalExp(prevMonthExpData)),
-      monthExp: number = parseFloat(totalExp(data)),
+      monthExp: number = parseFloat(totalExp(props.data)),
       percent: string | number = ((prevMonthExp - monthExp) / monthExp) * 100,
       direction: string = "Increase";
 
@@ -79,7 +78,7 @@ function Report(props: Props) {
     <div className="report">
       <div className="report-child">
         Overall monthly expenses:
-        {returnBold("$" + totalExp(data))}
+        {returnBold("$" + totalExp(props.data))}
       </div>
       <div className="report-child">
         {Math.abs(props.dates.toMonth - props.dates.fromMonth) === 1 ||
