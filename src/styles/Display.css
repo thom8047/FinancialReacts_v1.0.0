@@ -21,7 +21,7 @@
   text-align: right;
   padding-right: 5px;
   padding: 10px 0;
-  border-bottom: 1px solid darkgray;
+  /* border-bottom: 1px solid darkgray; */
 
   color: var(--nonHover);
 }
@@ -53,7 +53,7 @@
   user-select: none;
   width: 70px;
   border-right: 1px solid darkgray;
-  border-bottom: 1px solid darkgray;
+  /* border-bottom: 1px solid darkgray; */
   text-align: right;
   padding: 10px 5px;
 
