@@ -14,45 +14,48 @@
 }
 
 .priceDescr {
+  /* vertical-align: middle; */
+  display: inline-block;
   user-select: none;
   width: 80%;
   text-align: right;
-  float: right;
   padding-right: 5px;
-  padding-top: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid darkgray;
 
   color: var(--nonHover);
 }
 .priceTag {
+  display: inline-block;
   user-select: none;
   width: 70px;
   border-right: 1px solid darkgray;
+  border-bottom: 1px solid darkgray;
   text-align: right;
-  padding-right: 5px;
-  float: left;
-  padding-top: 15px;
+  padding: 10px 5px;
 
   color: var(--nonHover);
 }
 
 .priceDescr-selected {
+  display: inline-block;
   user-select: none;
   width: 80%;
   text-align: right;
-  float: right;
   padding-right: 5px;
-  padding-top: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid darkgray;
 
   color: #ff7f7f;
 }
 .priceTag-selected {
+  display: inline-block;
   user-select: none;
   width: 70px;
   border-right: 1px solid darkgray;
+  border-bottom: 1px solid darkgray;
   text-align: right;
-  padding-right: 5px;
-  float: left;
-  padding-top: 15px;
+  padding: 10px 5px;
 
   color: #ff7f7f;
 }

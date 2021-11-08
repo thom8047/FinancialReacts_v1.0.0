@@ -1,25 +1,27 @@
 import React from "react";
-import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
+import rtnFilteredNamedData from "../algorithm/rtnFilteredNamedData";
 import { DateTime } from "../types";
 
 interface Props {
   dates: DateTime;
+  data: any[];
+  name: string;
 }
 
 function Report(props: Props) {
-  const data = spliceDataBasedOnDate(props.dates);
-
   // Const variables that are based on data to be displayed
   const totalExp = (obj: any[]) => {
     let sum: number = 0;
     for (let trans of obj) {
-      sum += parseFloat(trans.CHARGE);
+      if (trans.CHARGE) {
+        sum += parseFloat(trans.CHARGE);
+      }
     }
     return sum.toFixed(2);
   };
   const getLargestPurchase = (): number => {
     let max: number = 0;
-    for (let trans of data) {
+    for (let trans of props.data) {
       if (parseFloat(trans.CHARGE) > max) {
         max = parseFloat(parseFloat(trans.CHARGE).toFixed(2));
       }
@@ -44,24 +46,28 @@ function Report(props: Props) {
     ];
     const fM = props.dates.fromMonth - 1 === 0 ? 12 : props.dates.fromMonth - 1,
       fY = fM === 12 ? props.dates.fromYear - 1 : props.dates.fromYear;
-    const prevMonthExpData = spliceDataBasedOnDate({
-      fromYear: fY,
-      fromMonth: fM,
-      toYear: props.dates.fromYear,
-      toMonth: props.dates.fromMonth,
+
+    const prevMonthExpData = rtnFilteredNamedData({
+      chargesOnly: true,
+      transferWithinAccountsRemoved: true,
+      name: props.name,
+      dates: {
+        fromYear: fY,
+        fromMonth: fM,
+        toYear: props.dates.fromYear,
+        toMonth: props.dates.fromMonth,
+      },
     });
     let prevMonthExp: number = parseFloat(totalExp(prevMonthExpData)),
-      monthExp: number = parseFloat(totalExp(data)),
-      percent: string | number = ((prevMonthExp - monthExp) / monthExp) * 100,
+      monthExp: number = parseFloat(totalExp(props.data)),
+      percent: string | number = (monthExp / prevMonthExp - 1) * 100,
       direction: string = "Increase";
 
-    if (percent > 0) {
-      percent = percent.toFixed(0);
+    if (percent >= 1) {
+      percent = percent.toFixed(2);
     } else {
-      // switch em
-      console.log("decr");
       direction = "Decrease";
-      percent = (((monthExp - prevMonthExp) / monthExp) * 100).toFixed(0);
+      percent = percent.toFixed(2);
     }
 
     return (
@@ -79,7 +85,7 @@ function Report(props: Props) {
     <div className="report">
       <div className="report-child">
         Overall monthly expenses:
-        {returnBold("$" + totalExp(data))}
+        {returnBold("$" + totalExp(props.data))}
       </div>
       <div className="report-child">
         {Math.abs(props.dates.toMonth - props.dates.fromMonth) === 1 ||

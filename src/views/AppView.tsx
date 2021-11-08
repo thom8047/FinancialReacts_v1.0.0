@@ -2,8 +2,8 @@
 import React from "react";
 import { ResponsiveContainer } from "recharts";
 // Modularized scripts
-import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
 import initialDate from "../algorithm/initialDate";
+import rtnFilteredNamedData from "../algorithm/rtnFilteredNamedData";
 // Components
 import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";
@@ -61,12 +61,36 @@ function AppView() {
       <div className="App-chart-n-rep-parent">
         <div className="chart-n-rep-child">
           <ResponsiveContainer width="50%" height="100%">
-            <Chart dates={dates} />
+            <Chart
+              dates={dates}
+              data={rtnFilteredNamedData({
+                chargesOnly: false,
+                transferWithinAccountsRemoved: true,
+                name: name.toLowerCase(),
+                dates: dates,
+              })}
+            />
           </ResponsiveContainer>
-          <InfoDisplay data={spliceDataBasedOnDate(dates)} />
+          <InfoDisplay
+            data={rtnFilteredNamedData({
+              chargesOnly: true,
+              transferWithinAccountsRemoved: true,
+              name: name.toLowerCase(),
+              dates: dates,
+            })}
+          />
         </div>
         <div className="chart-n-rep-child">
-          <Report dates={dates} />
+          <Report
+            dates={dates}
+            data={rtnFilteredNamedData({
+              chargesOnly: true,
+              transferWithinAccountsRemoved: true,
+              name: name.toLowerCase(),
+              dates: dates,
+            })}
+            name={name.toLowerCase()}
+          />
         </div>
       </div>
     </div>

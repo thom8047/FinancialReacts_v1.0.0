@@ -8,7 +8,6 @@ import {
   Legend,
   ReferenceLine,
 } from "recharts";
-import spliceDataBasedOnDate from "../algorithm/spliceDataBasedOnDate";
 import React from "react";
 
 interface chargeInfo {
@@ -24,7 +23,7 @@ interface tooltipProps {
 // Main
 
 function Chart(props: any) {
-  const data: any[] = spliceDataBasedOnDate(props.dates);
+  const data: any[] = props.data;
 
   // Functions
 
@@ -58,8 +57,12 @@ function Chart(props: any) {
         .join("/");
 
       if (transactionDate === stringifiedDate) {
-        info.charge += parseFloat(trans.CHARGE);
-        info.descr.push(`${trans.DESCR}^%$${trans.CHARGE}`);
+        if (trans.CHARGE) {
+          info.charge += parseFloat(trans.CHARGE);
+          info.descr.push(`${trans.DESCR}^%$${trans.CHARGE}`);
+        } else if (trans.INCOME) {
+          // INCOME LOGIC
+        }
       }
     }
 
@@ -151,7 +154,7 @@ function Chart(props: any) {
       <YAxis domain={[0, getLargestPurchase()]} />
       <Tooltip
         content={<CustomTooltip active={false} label={""} payload={[]} />}
-        // position={{ x: 1000, y: -150 }}
+        position={{ x: 800, y: -150 }}
       />
       <ReferenceLine x={0} stroke="#fff" label="" />
       <Legend />
