@@ -10,11 +10,13 @@ import DatePicker from "../components/DatePicker";
 import InfoDisplay from "../components/InfoDisplay";
 import Report from "../components/Report";
 import Header from "../components/Header";
+import CombinedDisplay from "../components/CombinedDisplay";
 
 function AppView() {
   // States
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initialDate);
+  const [getIndividualData, setIndividualData] = React.useState<any[]>([]);
 
   // Const event handlers
   const handleNameChange = () => {
@@ -78,7 +80,16 @@ function AppView() {
               name: name.toLowerCase(),
               dates: dates,
             })}
+            setIndividualData={(data) => {
+              setIndividualData(data);
+            }}
           />
+          <ResponsiveContainer>
+            <CombinedDisplay
+              name={name.toLowerCase()}
+              data={getIndividualData}
+            />
+          </ResponsiveContainer>
         </div>
         <div className="chart-n-rep-child">
           <Report
