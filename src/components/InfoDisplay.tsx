@@ -44,6 +44,9 @@ function InfoDisplay(props: Props): any {
   const getDataObj = (): JSX.Element => {
     let chargeList: JSX.Element[] = [];
     data.forEach((value: any, index: number) => {
+      if (value.INCOME) return false;
+      const tag = value.TRANS_DATE + value.CHARGE + value.DESCR;
+
       const handleHoverIn = () => {
         var ele = [
           document.getElementById(`Tag${index}`),
@@ -80,7 +83,7 @@ function InfoDisplay(props: Props): any {
 
           // Remove from state
           setSelectedItems((oldState) =>
-            oldState.filter((ids) => !(ids === value.REF_ID))
+            oldState.filter((ids) => !(ids === tag))
           );
         } else {
           ele.forEach((value: HTMLElement) => {
@@ -91,23 +94,19 @@ function InfoDisplay(props: Props): any {
           });
 
           // add to state
-          setSelectedItems((oldState) => [...oldState, value.REF_ID]);
+          setSelectedItems((oldState) => [...oldState, tag]);
         }
         setSum(parseFloat((sum + int).toFixed(2)));
       };
       chargeList.push(
-        <div key={value.REF_ID}>
+        <div key={tag}>
           <span
             className={
-              getSelectedItems.includes(value.REF_ID)
-                ? "priceTag-selected"
-                : "priceTag"
+              getSelectedItems.includes(tag) ? "priceTag-selected" : "priceTag"
             }
             id={"Tag" + index}
             onClick={handleClick}
-            data-selected={
-              getSelectedItems.includes(value.REF_ID) ? true : false
-            }
+            data-selected={getSelectedItems.includes(tag) ? true : false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
@@ -115,15 +114,13 @@ function InfoDisplay(props: Props): any {
           </span>
           <span
             className={
-              getSelectedItems.includes(value.REF_ID)
+              getSelectedItems.includes(tag)
                 ? "priceDescr-selected"
                 : "priceDescr"
             }
             id={"Descr" + index}
             onClick={handleClick}
-            data-selected={
-              getSelectedItems.includes(value.REF_ID) ? true : false
-            }
+            data-selected={getSelectedItems.includes(tag) ? true : false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >

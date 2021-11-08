@@ -24,7 +24,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+<<<<<<< HEAD
     "start:python": "cd ../../PythonPdfParserForFinancialReacts/python_modules/ && bash ParsePy && echo Done && cd ../../FinanceTracker/financial-reacts/ && npm start"
+=======
+    "start:python": "cd C:/Users/kedwa/Desktop/python_modules/ && bash ParsePy && echo Done && cd ../GitHub/LocalRepos/FinanceTracker/financial-reacts/ && npm start"
+>>>>>>> 3910f518248c7fd7120e8f1d15ba8cc6077ef3b8
   },
   "eslintConfig": {
     "extends": [
