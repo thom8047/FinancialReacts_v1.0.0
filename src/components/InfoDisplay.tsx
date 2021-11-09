@@ -176,8 +176,17 @@ function InfoDisplay(props: Props): any {
         </div>
         <div className="priceSum">
           SUM: <span>{sum}</span>
+          <span className="clearState" onClick={() => console.log("all")}>
+            SELECT ALL
+          </span>
           <span className="clearState" onClick={handleClearClick}>
             CLEAR
+          </span>
+          <span
+            className="clearState"
+            onClick={() => props.setIndividualData(data)}
+          >
+            SAVE
           </span>
         </div>
       </div>

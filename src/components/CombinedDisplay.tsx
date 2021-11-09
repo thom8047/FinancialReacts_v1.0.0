@@ -14,21 +14,28 @@ function CombinedDisplay(props: Props) {
     { name: "Group C", value: 300 },
     { name: "Group D", value: 200 },
   ];
+  const getIntVals = () => {
+    return props.data.map((trans) => {
+      trans.CHARGE = parseFloat(trans.CHARGE);
+      return trans;
+    });
+  };
+  console.log(getIntVals());
   return (
     <div className="combinedDataDisplay">
       <div style={{ width: "50%", float: "left" }}>
         <PieChart width={200} height={200}>
           <Pie
-            data={props.data}
-            dataKey="value"
+            data={getIntVals()}
+            dataKey="TRANS_DATE"
             cx="50%"
             cy="50%"
             outerRadius={30}
             fill="#8884d8"
           />
           <Pie
-            data={data01}
-            dataKey="value"
+            data={getIntVals()}
+            dataKey="CHARGE"
             cx="50%"
             cy="50%"
             innerRadius={40}
