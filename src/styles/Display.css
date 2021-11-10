@@ -78,6 +78,15 @@
 .clearState {
   cursor: pointer;
   float: right;
+  padding: 0 20px;
+  /* border: 1px solid #fff; */
+}
+.saveState {
+  cursor: pointer;
+  float: right;
+  margin: 0 -20%;
+  padding: 0 20px;
+  /* border: 1px solid #fff; */
 }
 
 .priceInfo-Tabs {

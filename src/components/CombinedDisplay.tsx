@@ -6,64 +6,74 @@ interface Props {
   name: string;
   data: any[];
 }
+interface Person {
+  camryn: number;
+  kyle: number;
+}
 
 function CombinedDisplay(props: Props) {
-  const data01 = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
   const getIntVals = () => {
     return props.data.map((trans) => {
       trans.CHARGE = parseFloat(trans.CHARGE);
       return trans;
     });
   };
-  console.log(getIntVals());
+
+  if (props.data) {
+    console.log(true);
+  }
+
   return (
     <div className="combinedDataDisplay">
-      <div style={{ width: "50%", float: "left" }}>
-        <PieChart width={200} height={200}>
-          <Pie
-            data={getIntVals()}
-            dataKey="TRANS_DATE"
-            cx="50%"
-            cy="50%"
-            outerRadius={30}
-            fill="#8884d8"
-          />
+      <div style={{ width: "50%", float: "left", marginTop: "-10px" }}>
+        <PieChart
+          width={300}
+          height={300}
+          margin={{ top: 25, right: 0, bottom: 0, left: 50 }}
+        >
           <Pie
             data={getIntVals()}
             dataKey="CHARGE"
             cx="50%"
             cy="50%"
+            outerRadius={30}
+            fill="#8884d8"
+            label
+          />
+          <Pie
+            data={eachPerson}
+            dataKey="camryn"
+            cx="50%"
+            cy="50%"
             innerRadius={40}
             outerRadius={50}
             fill="#82ca9d"
-            label
           />
         </PieChart>
       </div>
-      <div style={{ width: "50%", float: "left" }}>
-        <PieChart width={200} height={200}>
+      <div style={{ width: "50%", float: "left", marginTop: "-10px" }}>
+        <PieChart
+          width={300}
+          height={300}
+          margin={{ top: 25, right: 0, bottom: 0, left: 50 }}
+        >
           <Pie
-            data={data01}
-            dataKey="value"
+            data={getIntVals()}
+            dataKey="CHARGE"
             cx="50%"
             cy="50%"
             outerRadius={30}
             fill="#8884d8"
+            label
           />
           <Pie
-            data={data01}
-            dataKey="value"
+            data={eachPerson}
+            dataKey="camryn"
             cx="50%"
             cy="50%"
             innerRadius={40}
             outerRadius={50}
             fill="#82ca9d"
-            label
           />
         </PieChart>
       </div>
