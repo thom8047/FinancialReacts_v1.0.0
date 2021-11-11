@@ -16,7 +16,8 @@ function AppView() {
   // States
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initialDate);
-  const [getIndividualData, setIndividualData] = React.useState<any[]>([]);
+  const [getKyleData, setKyleData] = React.useState<any[]>([]);
+  const [getCamData, setCamData] = React.useState<any[]>([]);
 
   // Const event handlers
   const handleNameChange = () => {
@@ -81,13 +82,16 @@ function AppView() {
               dates: dates,
             })}
             setIndividualData={(data) => {
-              setIndividualData(data);
+              name.toLowerCase() === "kyle"
+                ? setKyleData(data)
+                : setCamData(data);
             }}
           />
           <ResponsiveContainer>
             <CombinedDisplay
               name={name.toLowerCase()}
-              data={getIndividualData}
+              dataK={getKyleData}
+              dataC={getCamData}
             />
           </ResponsiveContainer>
         </div>
