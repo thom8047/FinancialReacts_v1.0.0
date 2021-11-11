@@ -111,3 +111,12 @@
   cursor: pointer;
   border-right: 1px solid darkgray;
 }
+
+.description-title {
+  text-transform: capitalize;
+}
+.description-text {
+  border: 1px solid #fff;
+  width: 50%;
+  height: 100%;
+}

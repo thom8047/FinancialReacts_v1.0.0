@@ -61,10 +61,37 @@ function CombinedDisplay(props: Props) {
           },
         ];
   };
+  const styleKObj: any = {
+    position: "absolute",
+    width: "50%",
+    display: "inline-block",
+    marginLeft: props.name === "kyle" ? "50%" : "100%",
+    marginTop: "-75px",
+    transitionTimingFunction: "ease",
+    // border: "1px solid #fff",
+    transition: "1s",
+  };
+  const styleCObj: any = {
+    position: "absolute",
+    width: "50%",
+    display: "inline-block",
+    marginLeft: props.name === "camryn" ? "50%" : "100%",
+    marginTop: "-75px",
+    transitionTimingFunction: "ease",
+    // border: "1px solid #fff",
+    transition: "1s",
+  };
 
   return (
     <div className="combinedDataDisplay">
-      <div style={{ width: "50%", float: "left", marginTop: "-10px" }}>
+      <div className="description-title">{props.name}</div>
+      <div className="description-text">
+        <div>
+          Number of charges:
+          {props.name === "camryn" ? props.dataC.length : props.dataK.length}
+        </div>
+      </div>
+      <span style={styleCObj}>
         <PieChart
           width={300}
           height={300}
@@ -75,7 +102,7 @@ function CombinedDisplay(props: Props) {
             dataKey="CHARGE"
             cx="50%"
             cy="50%"
-            outerRadius={props.name === "kyle" ? 30 : 60}
+            outerRadius={60}
             fill="#23395d"
           />
           <Pie
@@ -83,13 +110,13 @@ function CombinedDisplay(props: Props) {
             dataKey="value"
             cx="50%"
             cy="50%"
-            outerRadius={props.name === "kyle" ? 50 : 80}
-            innerRadius={props.name === "kyle" ? 40 : 70}
+            outerRadius={80}
+            innerRadius={70}
             label
           />
         </PieChart>
-      </div>
-      <div style={{ width: "50%", float: "left", marginTop: "-10px" }}>
+      </span>
+      <span style={styleKObj}>
         <PieChart
           width={300}
           height={300}
@@ -100,7 +127,7 @@ function CombinedDisplay(props: Props) {
             dataKey="CHARGE"
             cx="50%"
             cy="50%"
-            outerRadius={props.name === "kyle" ? 60 : 30}
+            outerRadius={60}
             fill="#23395d"
           />
           <Pie
@@ -108,12 +135,12 @@ function CombinedDisplay(props: Props) {
             dataKey="value"
             cx="50%"
             cy="50%"
-            outerRadius={props.name === "kyle" ? 80 : 50}
-            innerRadius={props.name === "kyle" ? 70 : 40}
+            outerRadius={80}
+            innerRadius={70}
             label
           />
         </PieChart>
-      </div>
+      </span>
     </div>
   );
 }
