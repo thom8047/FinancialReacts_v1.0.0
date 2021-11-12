@@ -116,7 +116,9 @@
   text-transform: capitalize;
 }
 .description-text {
+  position: absolute;
   border: 1px solid #fff;
   width: 50%;
-  height: 100%;
+  margin-top: 10px;
+  padding: 10px 10px;
 }

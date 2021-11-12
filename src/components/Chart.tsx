@@ -1,5 +1,6 @@
 import {
-  LineChart,
+  // LineChart,
+  ComposedChart,
   Line,
   XAxis,
   YAxis,
@@ -8,16 +9,12 @@ import {
   Legend,
   ReferenceLine,
 } from "recharts";
+import { tooltipProps } from "../types";
 import React from "react";
 
 interface chargeInfo {
   charge: number;
   descr: string[];
-}
-interface tooltipProps {
-  active: boolean;
-  label: string | number;
-  payload: any[];
 }
 
 // Main
@@ -139,7 +136,7 @@ function Chart(props: any) {
   };
 
   return (
-    <LineChart
+    <ComposedChart
       width={900}
       height={300}
       data={getDatesForXAxis()}
@@ -157,10 +154,10 @@ function Chart(props: any) {
         position={{ x: 800, y: -150 }}
       />
       <ReferenceLine x={0} stroke="#fff" label="" />
-      <Legend />
+      <Legend height={36} />
       <Line type="monotone" dataKey="CHARGE" stroke="#FF7F7F" dot={false} />
       {/*#8884d8*/}
-    </LineChart>
+    </ComposedChart>
   );
 }
 
