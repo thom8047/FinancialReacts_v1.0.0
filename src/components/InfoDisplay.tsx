@@ -3,13 +3,12 @@ import React from "react";
 
 interface Props {
   data: any[];
+  setIndividualData: (data: any[]) => void;
 }
-
-const initItems: string[] = [];
 
 function InfoDisplay(props: Props): any {
   const [sum, setSum] = React.useState(0);
-  const [getSelectedItems, setSelectedItems] = React.useState(initItems);
+  const [getSelectedItems, setSelectedItems] = React.useState<any[]>([]);
   const [data, setData] = React.useState(Array.from(props.data));
 
   const handleClearClick = () => {
@@ -52,8 +51,8 @@ function InfoDisplay(props: Props): any {
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
-        ele.forEach((value: HTMLElement) => {
-          value.style.textDecoration = "underline";
+        ele.forEach((element: HTMLElement) => {
+          element.style.textDecoration = "underline";
         });
       };
       const handleHoverOut = () => {
@@ -62,8 +61,8 @@ function InfoDisplay(props: Props): any {
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
 
-        ele.forEach((value: HTMLElement) => {
-          value.style.textDecoration = "unset";
+        ele.forEach((element: HTMLElement) => {
+          element.style.textDecoration = "unset";
         });
       };
       const handleClick = () => {
@@ -74,27 +73,27 @@ function InfoDisplay(props: Props): any {
         var int = parseFloat(value.CHARGE);
         if (ele[0].getAttribute("data-selected") === "true") {
           int *= -1;
-          ele.forEach((value: HTMLElement) => {
-            const class_name = value.getAttribute("class") || "";
-            value.setAttribute("data-selected", "false");
-            value.setAttribute("class", class_name.split("-selected")[0]);
-            value.style.color = "#fff";
+          ele.forEach((element: HTMLElement) => {
+            const class_name = element.getAttribute("class") || "";
+            element.setAttribute("data-selected", "false");
+            element.setAttribute("class", class_name.split("-selected")[0]);
+            element.style.color = "#fff";
           });
 
           // Remove from state
           setSelectedItems((oldState) =>
-            oldState.filter((ids) => !(ids === tag))
+            oldState.filter((ids) => !(ids === value))
           );
         } else {
-          ele.forEach((value: HTMLElement) => {
-            const class_name = value.getAttribute("class") || "";
-            value.setAttribute("data-selected", "true");
-            value.setAttribute("class", `${class_name}-selected`);
-            value.style.color = "#ff7f7f";
+          ele.forEach((element: HTMLElement) => {
+            const class_name = element.getAttribute("class") || "";
+            element.setAttribute("data-selected", "true");
+            element.setAttribute("class", `${class_name}-selected`);
+            element.style.color = "#ff7f7f";
           });
 
           // add to state
-          setSelectedItems((oldState) => [...oldState, tag]);
+          setSelectedItems((oldState) => [...oldState, value]);
         }
         setSum(parseFloat((sum + int).toFixed(2)));
       };
@@ -102,11 +101,13 @@ function InfoDisplay(props: Props): any {
         <div key={tag}>
           <span
             className={
-              getSelectedItems.includes(tag) ? "priceTag-selected" : "priceTag"
+              getSelectedItems.includes(value)
+                ? "priceTag-selected"
+                : "priceTag"
             }
             id={"Tag" + index}
             onClick={handleClick}
-            data-selected={getSelectedItems.includes(tag) ? true : false}
+            data-selected={getSelectedItems.includes(value) ? true : false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
@@ -114,13 +115,13 @@ function InfoDisplay(props: Props): any {
           </span>
           <span
             className={
-              getSelectedItems.includes(tag)
+              getSelectedItems.includes(value)
                 ? "priceDescr-selected"
                 : "priceDescr"
             }
             id={"Descr" + index}
             onClick={handleClick}
-            data-selected={getSelectedItems.includes(tag) ? true : false}
+            data-selected={getSelectedItems.includes(value) ? true : false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
@@ -175,15 +176,18 @@ function InfoDisplay(props: Props): any {
         </div>
         <div className="priceSum">
           SUM: <span>{sum}</span>
+          <span
+            className="saveState"
+            onClick={() => props.setIndividualData(getSelectedItems)}
+          >
+            SAVE
+          </span>
+          <span className="clearState" onClick={() => console.log("all")}>
+            SELECT ALL
+          </span>
           <span className="clearState" onClick={handleClearClick}>
             CLEAR
           </span>
-        </div>
-
-        <div className="combinedDataDisplay">
-          Combined data:
-          <div>Camryn</div>
-          <div style={{ float: "right" }}>Kyle</div>
         </div>
       </div>
     );

@@ -10,11 +10,14 @@ import DatePicker from "../components/DatePicker";
 import InfoDisplay from "../components/InfoDisplay";
 import Report from "../components/Report";
 import Header from "../components/Header";
+import CombinedDisplay from "../components/CombinedDisplay";
 
 function AppView() {
   // States
   const [name, setName] = React.useState("Camryn");
   const [dates, setDates] = React.useState(initialDate);
+  const [getKyleData, setKyleData] = React.useState<any[]>([]);
+  const [getCamData, setCamData] = React.useState<any[]>([]);
 
   // Const event handlers
   const handleNameChange = () => {
@@ -78,7 +81,19 @@ function AppView() {
               name: name.toLowerCase(),
               dates: dates,
             })}
+            setIndividualData={(data) => {
+              name.toLowerCase() === "kyle"
+                ? setKyleData(data)
+                : setCamData(data);
+            }}
           />
+          <ResponsiveContainer>
+            <CombinedDisplay
+              name={name.toLowerCase()}
+              dataK={getKyleData}
+              dataC={getCamData}
+            />
+          </ResponsiveContainer>
         </div>
         <div className="chart-n-rep-child">
           <Report
