@@ -1,6 +1,7 @@
 import React from "react";
 import rtnFilteredNamedData from "../algorithm/rtnFilteredNamedData";
 import { DateTime } from "../types";
+import { returnBold, getLargestPurchase } from "../utils";
 
 interface Props {
   dates: DateTime;
@@ -18,16 +19,6 @@ function Report(props: Props) {
       }
     }
     return sum.toFixed(2);
-  };
-  const getLargestPurchase = (): number => {
-    let max: number = 0;
-    for (let trans of props.data) {
-      if (parseFloat(trans.CHARGE) > max) {
-        max = parseFloat(parseFloat(trans.CHARGE).toFixed(2));
-      }
-    }
-
-    return max;
   };
   const getPercentage = () => {
     const months = [
@@ -77,9 +68,6 @@ function Report(props: Props) {
       </div>
     );
   };
-  const returnBold = (inner: string | number) => (
-    <b className="report-bold">{inner}</b>
-  );
 
   return (
     <div className="report">
@@ -95,7 +83,8 @@ function Report(props: Props) {
         {/* Change to show monthly averages of payments */}
       </div>
       <div className="report-child">
-        Largest expense of the period: {returnBold("$" + getLargestPurchase())}
+        Largest expense of the period:{" "}
+        {returnBold("$" + getLargestPurchase(props.data))}
       </div>
       <div className="report-child">
         Savings: {returnBold("**")}No savings data currently available

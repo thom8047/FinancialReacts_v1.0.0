@@ -1,6 +1,7 @@
 import { PieChart, Pie, Legend, Tooltip } from "recharts";
 import "../styles/Display.css";
 import { tooltipProps } from "../types";
+import { returnBold } from "../utils";
 import React from "react";
 
 interface Props {
@@ -64,11 +65,6 @@ function CombinedDisplay(props: Props) {
           },
         ];
   };
-  const returnBold = (inner: string | number, color?: string) => (
-    <b className="report-bold" style={color ? { color: color } : {}}>
-      {inner}
-    </b>
-  );
   const CustomTooltip = ({ active, payload, label }: tooltipProps) => {
     if (active && payload && payload.length && payload[0].payload.CHARGE) {
       return (

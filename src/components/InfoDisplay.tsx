@@ -1,4 +1,5 @@
 import "../styles/Display.css";
+import { rmvExtraText } from "../utils";
 import React from "react";
 
 interface Props {
@@ -125,7 +126,7 @@ function InfoDisplay(props: Props): any {
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
-            {value.DESCR}
+            {rmvExtraText(value.DESCR)}
           </span>
         </div>
       );

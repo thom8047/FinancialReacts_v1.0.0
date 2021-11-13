@@ -10,6 +10,11 @@ import {
   ReferenceLine,
 } from "recharts";
 import { tooltipProps } from "../types";
+import {
+  rmvExtraText,
+  getReadableDateFromDateObj,
+  getLargestPurchase,
+} from "../utils";
 import React from "react";
 
 interface chargeInfo {
@@ -23,21 +28,6 @@ function Chart(props: any) {
   const data: any[] = props.data;
 
   // Functions
-
-  const getLargestPurchase = (): number => {
-    let max: number = 0;
-    for (let trans of data) {
-      if (parseFloat(trans.CHARGE) > max) {
-        max = parseFloat((parseFloat(trans.CHARGE) + 20).toFixed(2));
-      }
-    }
-
-    return max;
-  };
-
-  const getReadableDateFromDateObj = (date: Date) => {
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-  };
 
   const putTransactionIn = (stringifiedDate: string): chargeInfo => {
     const info: chargeInfo = {
@@ -111,7 +101,7 @@ function Chart(props: any) {
           {payload[0].payload.DESCR.split("|^").map((descr: string) => {
             return (
               <div key={descr} className="custom-tooltip">
-                <div>{descr.split("^%$")[0]}</div>
+                <div>{rmvExtraText(descr.split("^%$")[0])}</div>
                 <div>$ {descr.split("^%$")[1]}</div>
               </div>
             );
@@ -148,7 +138,7 @@ function Chart(props: any) {
         interval={"preserveStartEnd"}
         tickFormatter={tickToDate}
       />
-      <YAxis domain={[0, getLargestPurchase()]} />
+      <YAxis domain={[0, getLargestPurchase(props.data, 20)]} />
       <Tooltip
         content={<CustomTooltip active={false} label={""} payload={[]} />}
         position={{ x: 800, y: -150 }}
