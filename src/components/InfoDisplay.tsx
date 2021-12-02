@@ -4,46 +4,91 @@ import React from "react";
 
 interface Props {
   data: any[];
+  selected: any[];
   setIndividualData: (data: any[]) => void;
 }
 
-function InfoDisplay(props: Props): any {
-  const [sum, setSum] = React.useState(0);
-  const [getSelectedItems, setSelectedItems] = React.useState<any[]>([]);
-  const [data, setData] = React.useState(Array.from(props.data));
+const sumOfTrans = (list: any[]): number => {
+  let total: number = 0;
+  list.forEach((trans: any) => {
+    if (trans.CHARGE) {
+      total += parseFloat(trans.CHARGE);
+    }
+  });
 
-  const handleClearClick = () => {
-    setSum(0);
-    setSelectedItems([]);
-    data.forEach((value: any, index: number) => {
+  return total;
+};
+
+function InfoDisplay(props: Props): any {
+  const [data, setData] = React.useState(Array.from(props.data));
+  const [sum, setSum] = React.useState(sumOfTrans(props.selected));
+  const [getSelectedItems, setSelectedItems] = React.useState<any[]>(
+    props.selected
+  );
+  const [tabState, setTabState] = React.useState<string>("All");
+  const listOfNames: string[] = ["All", "KING SOOPERS", "FUEL", "WINE", "AMZN"];
+
+  const handleClearClick = (_data: any[]) => {
+    let specificSum: number = 0,
+      specificValues: any[] = [];
+    _data.forEach((value: any, index: number) => {
+      if (getSelectedItems.includes(value)) {
+        specificSum += parseFloat(value.CHARGE);
+        specificValues.push(value);
+      }
+
       var ele = [
         document.getElementById(`Tag${index}`),
         document.getElementById(`Descr${index}`),
       ] as HTMLElement[];
       if (ele[0] && ele[1]) {
-        ele[0].setAttribute("data-selected", "false");
-        ele[0].style.color = "#fff";
-        ele[1].setAttribute("data-selected", "false");
-        ele[1].style.color = "#fff";
+        let class_name = ele[0].getAttribute("class") || "";
+        ele[0].setAttribute("class", class_name.split("-selected")[0]);
+        class_name = ele[1].getAttribute("class") || "";
+        ele[1].setAttribute("class", class_name.split("-selected")[0]);
       }
     });
+
+    setSum((oldSum) => oldSum - specificSum);
+    setSelectedItems((oldSelected) =>
+      oldSelected.filter((trans: any) => !specificValues.includes(trans))
+    );
+    props.setIndividualData(
+      getSelectedItems.filter((trans: any) => !specificValues.includes(trans))
+    );
+  };
+  const handleSelectAll = () => {
+    const filterBy: string = tabState;
+    const filteredData: any[] = props.data.filter((trans: any) => {
+      if (filterBy) {
+        if (filterBy === "All") {
+          return true;
+        }
+        return trans.DESCR.toLowerCase().includes(filterBy.toLowerCase());
+      }
+      return false;
+    });
+    if (getSelectedItems.includes(filteredData)) {
+      //pass
+    } else {
+      const newlySelected: any[] = Array.from(
+        new Set(getSelectedItems.concat(filteredData))
+      );
+      setSelectedItems(newlySelected);
+      setSum(() => {
+        var x: number = 0;
+        for (let trans of newlySelected) {
+          x += parseFloat(trans.CHARGE);
+        }
+        return parseFloat(x.toFixed(2));
+      });
+      props.setIndividualData(newlySelected);
+    }
   };
 
-  // eslint-disable-next-line
-  const clear = React.useCallback(handleClearClick, []);
-
-  React.useEffect(() => {
-    // When props.data changes, keep shit updated, changing the key only updates our css
-    console.log("RE-RENDER");
-    clear();
-    setData(props.data);
-  }, [props.data, clear]);
-
-  const listOfNames: string[] = ["All", "KING SOOPERS", "FUEL", "WINE", "AMZN"];
-
-  const getDataObj = (): JSX.Element => {
-    let chargeList: JSX.Element[] = [];
-    data.forEach((value: any, index: number) => {
+  const getTabData = (_data: any[]): JSX.Element[] => {
+    let chargedList: JSX.Element[] = [];
+    _data.forEach((value: any, index: number) => {
       if (value.INCOME) return false;
       const tag = value.TRANS_DATE + value.CHARGE + value.DESCR;
 
@@ -72,33 +117,33 @@ function InfoDisplay(props: Props): any {
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
         var int = parseFloat(value.CHARGE);
-        if (ele[0].getAttribute("data-selected") === "true") {
+        if (getSelectedItems.includes(value)) {
           int *= -1;
           ele.forEach((element: HTMLElement) => {
             const class_name = element.getAttribute("class") || "";
-            element.setAttribute("data-selected", "false");
             element.setAttribute("class", class_name.split("-selected")[0]);
-            element.style.color = "#fff";
           });
 
           // Remove from state
           setSelectedItems((oldState) =>
             oldState.filter((ids) => !(ids === value))
           );
+          props.setIndividualData(
+            getSelectedItems.filter((ids) => !(ids === value))
+          );
         } else {
           ele.forEach((element: HTMLElement) => {
             const class_name = element.getAttribute("class") || "";
-            element.setAttribute("data-selected", "true");
             element.setAttribute("class", `${class_name}-selected`);
-            element.style.color = "#ff7f7f";
           });
 
           // add to state
           setSelectedItems((oldState) => [...oldState, value]);
+          props.setIndividualData([...getSelectedItems, value]);
         }
         setSum(parseFloat((sum + int).toFixed(2)));
       };
-      chargeList.push(
+      chargedList.push(
         <div key={tag}>
           <span
             className={
@@ -108,11 +153,10 @@ function InfoDisplay(props: Props): any {
             }
             id={"Tag" + index}
             onClick={handleClick}
-            data-selected={getSelectedItems.includes(value) ? true : false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
-            {value.CHARGE}
+            {parseFloat(value.CHARGE).toFixed(2)}
           </span>
           <span
             className={
@@ -122,7 +166,6 @@ function InfoDisplay(props: Props): any {
             }
             id={"Descr" + index}
             onClick={handleClick}
-            data-selected={getSelectedItems.includes(value) ? true : false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
@@ -132,25 +175,23 @@ function InfoDisplay(props: Props): any {
       );
     });
 
+    return chargedList;
+  };
+
+  const getDataObj = (): JSX.Element => {
     return (
       <div>
         <div className="display">
           <div id="tabs-parent" className="priceInfo-Tabs">
             {listOfNames.map((value: string) => {
-              let className = "tabs";
-              if (value === "All") {
+              let className: string = "tabs";
+              if (value === tabState) {
                 className += "-selected";
+              } else {
+                className = "tabs";
               }
 
               const handleTabChange = () => {
-                const parent = document.getElementById(
-                  "tabs-parent"
-                ) as HTMLElement;
-                for (let i = 0; i < parent.children.length; i++) {
-                  parent.children[i].setAttribute("class", "tabs");
-                }
-                const self = document.getElementById(value);
-                self?.setAttribute("class", "tabs-selected");
                 if (value === "All") {
                   setData(props.data);
                 } else {
@@ -160,10 +201,12 @@ function InfoDisplay(props: Props): any {
                     )
                   );
                 }
+
+                setTabState(value);
               };
               return (
                 <span
-                  key={`${value}${props.data.length}`}
+                  key={`${value}${props.selected.length}`}
                   className={className}
                   id={value}
                   onClick={handleTabChange}
@@ -173,20 +216,14 @@ function InfoDisplay(props: Props): any {
               );
             })}
           </div>
-          <div className="priceInfo">{chargeList}</div>
+          <div className="priceInfo">{getTabData(data)}</div>
         </div>
         <div className="priceSum">
-          SUM: <span>{sum}</span>
-          <span
-            className="saveState"
-            onClick={() => props.setIndividualData(getSelectedItems)}
-          >
-            SAVE
-          </span>
-          <span className="clearState" onClick={() => console.log("all")}>
+          SUM: <span>{sum.toFixed(2)}</span>
+          <span className="clearState" onClick={handleSelectAll}>
             SELECT ALL
           </span>
-          <span className="clearState" onClick={handleClearClick}>
+          <span className="clearState" onClick={() => handleClearClick(data)}>
             CLEAR
           </span>
         </div>

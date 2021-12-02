@@ -1,7 +1,7 @@
 import { PieChart, Pie, Legend, Tooltip } from "recharts";
 import "../styles/Display.css";
 import { tooltipProps } from "../types";
-import { returnBold } from "../utils";
+import { returnBold, rmvExtraText } from "../utils";
 import React from "react";
 
 interface Props {
@@ -33,10 +33,9 @@ function CombinedDisplay(props: Props) {
   };
   const getPaymentAmount = (who: string) => {
     const [c, k] = getDiff();
-    // console.log(`C has paid: ${c} | K has paid ${k}`);
     const each = parseFloat(((c + k) / 2).toFixed(2));
-    const paidK = parseFloat((each - k).toFixed(2));
-    const paidC = parseFloat((each - c).toFixed(2));
+    const amountPaidK = parseFloat((each - k).toFixed(2));
+    const amountPaidC = parseFloat((each - c).toFixed(2));
     return who === "c"
       ? [
           {
@@ -45,10 +44,12 @@ function CombinedDisplay(props: Props) {
             fill: "#AEBCC4",
           },
           {
-            descr: paidC > 0 ? "Gives" : "Gets",
-            value: Math.abs(paidC),
-            fill: paidC > 0 ? "	#FF0000" : "#008000",
-            type: paidC > 0 ? "owe" : "should get paid",
+            descr: amountPaidC > 0 ? "Gives" : "Gets",
+            value: Math.abs(amountPaidC),
+            fill: amountPaidC > 0 ? "	#FF0000" : "#008000",
+            type: amountPaidC > 0 ? "owe" : "should get paid",
+            percent: c / (c + k),
+            total: c + k,
           },
         ]
       : [
@@ -58,10 +59,12 @@ function CombinedDisplay(props: Props) {
             fill: "#AEBCC4",
           },
           {
-            descr: paidK > 0 ? "Gives" : "Gets",
-            value: Math.abs(paidK),
-            fill: paidK > 0 ? "#FF0000" : "#008000",
-            type: paidK > 0 ? "owe" : "should get paid",
+            descr: amountPaidK > 0 ? "Gives" : "Gets",
+            value: Math.abs(amountPaidK),
+            fill: amountPaidK > 0 ? "#FF0000" : "#008000",
+            type: amountPaidK > 0 ? "owe" : "should get paid",
+            percent: k / (c + k),
+            total: c + k,
           },
         ];
   };
@@ -69,7 +72,9 @@ function CombinedDisplay(props: Props) {
     if (active && payload && payload.length && payload[0].payload.CHARGE) {
       return (
         <div>
-          <div className="custom-tooltip">{payload[0].payload.DESCR}:</div>
+          <div className="custom-tooltip">
+            {rmvExtraText(payload[0].payload.DESCR)}:
+          </div>
           {parseFloat(payload[0].payload.CHARGE).toFixed(2)}
         </div>
       );
@@ -98,6 +103,12 @@ function CombinedDisplay(props: Props) {
     transition: "1s",
   };
 
+  const getPaymentAmountData: any = getPaymentAmount(
+    props.name.split("")[0]
+  )[1];
+
+  console.log(getPaymentAmountData.value.toFixed(2));
+
   return (
     <div className="combinedDataDisplay">
       <div className="description-title">{props.name}</div>
@@ -109,11 +120,15 @@ function CombinedDisplay(props: Props) {
             : returnBold(props.dataK.length)}
         </div>
         <div>
-          You {getPaymentAmount(props.name.split("")[0])[1].type} :
+          You {getPaymentAmountData.type} :
           {returnBold(
-            `$${getPaymentAmount(props.name.split("")[0])[1].value.toFixed(2)}`,
-            getPaymentAmount(props.name.split("")[0])[1].fill
+            `$${getPaymentAmountData.value.toFixed(2)}`,
+            getPaymentAmountData.fill
           )}
+        </div>
+        <div>
+          You paid: {returnBold(`${getPaymentAmountData.percent.toFixed(2)} %`)}
+          of the total {returnBold(`$${getPaymentAmountData.total.toFixed(2)}`)}
         </div>
       </div>
       <span style={styleCObj}>
@@ -131,8 +146,8 @@ function CombinedDisplay(props: Props) {
             outerRadius={60}
             fill="#23395d"
             paddingAngle={1}
-            minAngle={1}
-            legendType={props.dataC.length > 15 ? "none" : "line"}
+            minAngle={3}
+            legendType={props.dataC.length > 0 ? "none" : "line"}
           />
           <Pie
             data={getPaymentAmount("c")}
@@ -165,8 +180,8 @@ function CombinedDisplay(props: Props) {
             outerRadius={60}
             fill="#23395d"
             paddingAngle={1}
-            minAngle={1}
-            legendType={props.dataK.length > 15 ? "none" : "line"}
+            minAngle={3}
+            legendType={props.dataK.length > 0 ? "none" : "line"}
           />
           <Pie
             data={getPaymentAmount("k")}

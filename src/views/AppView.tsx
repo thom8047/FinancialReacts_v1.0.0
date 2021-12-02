@@ -75,12 +75,14 @@ function AppView() {
             />
           </ResponsiveContainer>
           <InfoDisplay
+            key={name.toLowerCase()}
             data={rtnFilteredNamedData({
               chargesOnly: true,
               transferWithinAccountsRemoved: true,
               name: name.toLowerCase(),
               dates: dates,
             })}
+            selected={name.toLowerCase() === "kyle" ? getKyleData : getCamData}
             setIndividualData={(data) => {
               name.toLowerCase() === "kyle"
                 ? setKyleData(data)
