@@ -1,5 +1,4 @@
 import { PieChart, Pie, Legend, Tooltip } from "recharts";
-import "../styles/Display.css";
 import { tooltipProps } from "../types";
 import { returnBold, rmvExtraText } from "../utils";
 import React from "react";
@@ -107,8 +106,6 @@ function CombinedDisplay(props: Props) {
     props.name.split("")[0]
   )[1];
 
-  console.log(getPaymentAmountData.value.toFixed(2));
-
   return (
     <div className="combinedDataDisplay">
       <div className="description-title">{props.name}</div>
@@ -123,7 +120,9 @@ function CombinedDisplay(props: Props) {
           You {getPaymentAmountData.type} :
           {returnBold(
             `$${getPaymentAmountData.value.toFixed(2)}`,
-            getPaymentAmountData.fill
+            getPaymentAmountData.fill === "#008000"
+              ? "#82ca9d"
+              : getPaymentAmountData.fill
           )}
         </div>
         <div>

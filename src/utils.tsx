@@ -8,7 +8,12 @@
  */
 
 const rmvExtraText = (text: string): string => {
-  return text.replace("Purchase authorized on", "");
+  let extras: string[] = ["Purchase authorized on", "INCOME "];
+  extras.forEach((searchValue: string) => {
+    text = text.replace(searchValue, "");
+  });
+
+  return text;
 };
 
 /**

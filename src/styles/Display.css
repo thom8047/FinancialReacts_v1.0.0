@@ -114,9 +114,12 @@
 
 .description-title {
   text-transform: capitalize;
+  position: relative;
+  z-index: 1;
 }
 .description-text {
-  position: absolute;
+  position: relative;
+  z-index: 1;
   /* border: 1px solid #fff; */
   width: 50%;
   margin-top: 10px;
