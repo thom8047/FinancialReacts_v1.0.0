@@ -38,7 +38,7 @@ function CombinedDisplay(props: Props) {
     return who === "c"
       ? [
           {
-            descr: "Total of what each owes",
+            descr: "Total of what Camryn paid",
             value: c,
             fill: "#AEBCC4",
           },
@@ -53,7 +53,7 @@ function CombinedDisplay(props: Props) {
         ]
       : [
           {
-            descr: "Total of what each owes",
+            descr: "Total of what Kyle paid",
             value: k,
             fill: "#AEBCC4",
           },
@@ -85,8 +85,8 @@ function CombinedDisplay(props: Props) {
     position: "absolute",
     width: "50%",
     display: "inline-block",
-    marginLeft: props.name === "kyle" ? "50%" : "100%",
-    marginTop: "-75px",
+    marginLeft: props.name === "kyle" ? "50%" : "120%",
+    marginTop: "-175px",
     transitionTimingFunction: "ease",
     // border: "1px solid #fff",
     transition: "1s",
@@ -95,8 +95,8 @@ function CombinedDisplay(props: Props) {
     position: "absolute",
     width: "50%",
     display: "inline-block",
-    marginLeft: props.name === "camryn" ? "50%" : "100%",
-    marginTop: "-75px",
+    marginLeft: props.name === "camryn" ? "50%" : "120%",
+    marginTop: "-175px",
     transitionTimingFunction: "ease",
     // border: "1px solid #fff",
     transition: "1s",
@@ -132,7 +132,7 @@ function CombinedDisplay(props: Props) {
       </div>
       <span style={styleCObj}>
         <PieChart
-          width={300}
+          width={350}
           height={300}
           margin={{ top: 25, right: 0, bottom: 0, left: 40 }}
         >
@@ -166,7 +166,7 @@ function CombinedDisplay(props: Props) {
       </span>
       <span style={styleKObj}>
         <PieChart
-          width={300}
+          width={350}
           height={300}
           margin={{ top: 25, right: 0, bottom: 0, left: 40 }}
         >

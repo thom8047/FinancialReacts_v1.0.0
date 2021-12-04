@@ -4,7 +4,7 @@ import {
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
+  // CartesianGrid,
   Tooltip,
   Legend,
   ReferenceLine,
@@ -15,7 +15,7 @@ import {
   rmvExtraText,
   returnBold,
   getReadableDateFromDateObj,
-  getLargestPurchase,
+  float,
 } from "../utils";
 import React from "react";
 
@@ -32,6 +32,40 @@ function Chart(props: any) {
   const data: any[] = props.data;
 
   // Functions
+
+  const getDailyIncome = (): number[] => {
+    const copy = Array.from(data);
+    let largestIncomeRange: number = 0;
+    let smallestIncomeRange: number = 0;
+    let _allIncome = 0;
+
+    for (const trans of copy) {
+      if (trans.CHARGE) {
+        _allIncome -= float(trans.CHARGE);
+      }
+      if (trans.INCOME) {
+        _allIncome += float(trans.INCOME);
+      }
+
+      smallestIncomeRange =
+        _allIncome < smallestIncomeRange
+          ? float(_allIncome)
+          : smallestIncomeRange;
+      largestIncomeRange =
+        _allIncome > largestIncomeRange
+          ? float(_allIncome)
+          : largestIncomeRange;
+    }
+
+    console.log(
+      "SMALL Y:",
+      smallestIncomeRange,
+      "LARGE Y: ",
+      largestIncomeRange
+    );
+
+    return [smallestIncomeRange, largestIncomeRange];
+  };
 
   const putTransactionIn = (stringifiedDate: string): transactionInfo => {
     const info: transactionInfo = {
@@ -50,24 +84,23 @@ function Chart(props: any) {
 
       if (transactionDate === stringifiedDate) {
         if (trans.CHARGE) {
-          info.charge += parseFloat(trans.CHARGE);
-          allIncome =
-            /* allIncome - parseFloat(trans.CHARGE) < 0
-              ? 0
-              :  */ allIncome - parseFloat(trans.CHARGE);
+          allIncome -= float(trans.CHARGE);
+
+          info.charge += float(trans.CHARGE);
+          info.income = allIncome;
           info.descr.push(`${trans.DESCR}^%$${trans.CHARGE}`);
         }
         if (trans.INCOME) {
-          info.income += parseFloat(trans.INCOME);
-          allIncome += parseFloat(trans.INCOME);
+          allIncome += float(trans.INCOME);
+
+          info.income = float(info.income + float(trans.INCOME));
           info.descr.push(`INCOME ${trans.DESCR}^%$${trans.INCOME}`);
-          console.log(info);
         }
       }
     }
 
-    if (info.charge) info.charge = parseFloat(info.charge.toFixed(2));
-    if (info.income) info.income = parseFloat(info.income.toFixed(2));
+    if (info.charge) info.charge = float(info.charge);
+    if (info.income) info.income = float(info.income);
 
     return info;
   };
@@ -157,6 +190,14 @@ function Chart(props: any) {
     return date;
   };
 
+  const getPercentage = (): number => {
+    const [smallestIncomeRange, largestIncomeRange] = getDailyIncome();
+    let total = largestIncomeRange - smallestIncomeRange;
+    const posPercent = (total + smallestIncomeRange) / total;
+
+    return Math.ceil(posPercent * 100);
+  };
+
   return (
     <ComposedChart
       width={900}
@@ -166,27 +207,42 @@ function Chart(props: any) {
     >
       <defs>
         <linearGradient id="income" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-          <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+          <stop offset="0%" stopColor="#82ca9d" stopOpacity={1} />
+          <stop
+            offset={`${getPercentage()}%`}
+            stopColor="#82ca9d"
+            stopOpacity={0}
+          />
+          <stop
+            offset={`${getPercentage()}%`}
+            stopColor="#FF7F7F"
+            stopOpacity={0}
+          />
+          <stop offset="100%" stopColor="#FF7F7F" stopOpacity={1} />
         </linearGradient>
-        <linearGradient id="charge" x1="0" y1="0" x2="0" y2="1">
+        {/* <linearGradient id="charge" x1="0" y1="-1" x2="0" y2="0">
           <stop offset="50%" stopColor="#FF7F7F" stopOpacity={0.8} />
           <stop offset="95%" stopColor="#FF7F7F" stopOpacity={0.1} />
-        </linearGradient>
+        </linearGradient> */}
       </defs>
-      <CartesianGrid strokeDasharray="3 3" />
+      {/* <CartesianGrid strokeDasharray="3 3" /> */}
       <XAxis
         dataKey="date"
         interval={"preserveStartEnd"}
         tickFormatter={tickToDate}
       />
-      <YAxis domain={[0, getLargestPurchase(props.data, 20)]} />
+      <YAxis domain={["dataMin", "dataMax"]} />
       <Tooltip
         content={<CustomTooltip active={false} label={""} payload={[]} />}
         position={{ x: 800, y: -150 }}
       />
       <ReferenceLine x={0} stroke="#fff" label="" />
-      <Legend height={36} />
+      <Legend
+        // margin={{ top: 10, left: 0, right: 0, bottom: 0 }}
+        verticalAlign="top"
+        align="right"
+        height={30}
+      />
       <Area
         type="monotone"
         dataKey="INCOME"
@@ -201,6 +257,13 @@ function Chart(props: any) {
         dot={false}
         fillOpacity={1}
         fill="url(#charge)"
+      />
+      <ReferenceLine
+        y={0}
+        stroke="#fff"
+        strokeDasharray="3 3"
+        opacity={0.5}
+        label=""
       />
     </ComposedChart>
   );

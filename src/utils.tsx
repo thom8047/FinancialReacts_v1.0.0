@@ -57,9 +57,22 @@ const getLargestPurchase = (data: any[], offset: number = 0): number => {
   return max;
 };
 
+/**
+ *
+ * Function to parseFloat() and toFixed(2)
+ *
+ * return adjusted float
+ */
+const float = (int: number | string): number => {
+  return typeof int === "string"
+    ? parseFloat(parseFloat(int).toFixed(2))
+    : parseFloat(int.toFixed(2));
+};
+
 export {
   rmvExtraText,
   getReadableDateFromDateObj,
   returnBold,
   getLargestPurchase,
+  float,
 };

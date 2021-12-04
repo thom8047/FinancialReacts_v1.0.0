@@ -66,6 +66,7 @@ function AppView() {
           <ResponsiveContainer width="50%" height="100%">
             <Chart
               dates={dates}
+              dataOffset={0}
               data={rtnFilteredNamedData({
                 chargesOnly: false,
                 transferWithinAccountsRemoved: true,
