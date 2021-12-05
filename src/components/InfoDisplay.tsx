@@ -25,6 +25,7 @@ function InfoDisplay(props: Props): any {
     props.selected
   );
   const [tabState, setTabState] = React.useState<string>("All");
+  const [hoveredDate, setHoveredDate] = React.useState<string>("");
   const listOfNames: string[] = ["All", "KING SOOPERS", "FUEL", "WINE", "AMZN"];
 
   const handleClearClick = (_data: any[]) => {
@@ -99,6 +100,8 @@ function InfoDisplay(props: Props): any {
         ele.forEach((element: HTMLElement) => {
           element.style.textDecoration = "underline";
         });
+
+        setHoveredDate(value.TRANS_DATE);
       };
       const handleHoverOut = () => {
         var ele = [
@@ -109,6 +112,8 @@ function InfoDisplay(props: Props): any {
         ele.forEach((element: HTMLElement) => {
           element.style.textDecoration = "unset";
         });
+
+        setHoveredDate("");
       };
       const handleClick = () => {
         var ele = [
@@ -214,6 +219,7 @@ function InfoDisplay(props: Props): any {
                 </span>
               );
             })}
+            <span className="tab-date-hover">{hoveredDate}</span>
           </div>
           <div className="priceInfo">{getTabData(data)}</div>
         </div>

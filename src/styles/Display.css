@@ -12,7 +12,10 @@
   margin-left: 25px;
   border: 1px solid darkgray;
 }
-
+.tab-date-hover {
+  color: var(--nonHover);
+  float: right;
+}
 .description-title {
   text-transform: capitalize;
   /* margin-top: 30px; */
