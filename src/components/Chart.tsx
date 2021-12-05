@@ -1,10 +1,8 @@
 import {
-  // LineChart,
   ComposedChart,
   Line,
   XAxis,
   YAxis,
-  // CartesianGrid,
   Tooltip,
   Legend,
   ReferenceLine,
@@ -56,13 +54,6 @@ function Chart(props: any) {
           ? float(_allIncome)
           : largestIncomeRange;
     }
-
-    console.log(
-      "SMALL Y:",
-      smallestIncomeRange,
-      "LARGE Y: ",
-      largestIncomeRange
-    );
 
     return [smallestIncomeRange, largestIncomeRange];
   };
@@ -195,7 +186,7 @@ function Chart(props: any) {
     let total = largestIncomeRange - smallestIncomeRange;
     const posPercent = (total + smallestIncomeRange) / total;
 
-    return Math.ceil(posPercent * 100);
+    return Math.ceil(posPercent * 100) || 0;
   };
 
   return (
@@ -220,12 +211,7 @@ function Chart(props: any) {
           />
           <stop offset="100%" stopColor="#FF7F7F" stopOpacity={1} />
         </linearGradient>
-        {/* <linearGradient id="charge" x1="0" y1="-1" x2="0" y2="0">
-          <stop offset="50%" stopColor="#FF7F7F" stopOpacity={0.8} />
-          <stop offset="95%" stopColor="#FF7F7F" stopOpacity={0.1} />
-        </linearGradient> */}
       </defs>
-      {/* <CartesianGrid strokeDasharray="3 3" /> */}
       <XAxis
         dataKey="date"
         interval={"preserveStartEnd"}
@@ -237,12 +223,7 @@ function Chart(props: any) {
         position={{ x: 800, y: -150 }}
       />
       <ReferenceLine x={0} stroke="#fff" label="" />
-      <Legend
-        // margin={{ top: 10, left: 0, right: 0, bottom: 0 }}
-        verticalAlign="top"
-        align="right"
-        height={30}
-      />
+      <Legend verticalAlign="top" align="right" height={30} />
       <Area
         type="monotone"
         dataKey="INCOME"
