@@ -1,4 +1,3 @@
-import "../styles/Display.css";
 import { rmvExtraText } from "../utils";
 import React from "react";
 

@@ -29,7 +29,8 @@ function rtnFilteredNamedData(props: Parser): any[] {
         /* We want to exclude all our money movement between personal accounts */
         trans.DESCR.includes("Recurring Transfer to") ||
         trans.DESCR.includes("Online Transfer Ref") ||
-        trans.DESCR.includes("Save As You Go Transfer Debit to")
+        trans.DESCR.includes("Save As You Go Transfer Debit to") ||
+        trans.DESCR.includes("Online Transfer to")
       ) {
         return false;
       }

@@ -13,14 +13,9 @@
 .App {
   text-align: left;
 }
-.custom-tooltip {
-  z-index: 5;
-  border: 1px solid #fff;
-  color: #fff;
-  background-color: #444;
-  padding: 10px 20px;
-  font-size: 12px;
-}
+/* .recharts-legend-wrapper {
+  padding-top: 33%;
+} */
 
 .App-header {
   width: 100%;

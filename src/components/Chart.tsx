@@ -1,38 +1,68 @@
 import {
-  // LineChart,
   ComposedChart,
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ReferenceLine,
+  Area,
 } from "recharts";
 import { tooltipProps } from "../types";
 import {
   rmvExtraText,
+  returnBold,
   getReadableDateFromDateObj,
-  getLargestPurchase,
+  float,
 } from "../utils";
 import React from "react";
 
-interface chargeInfo {
+interface transactionInfo {
   charge: number;
   descr: string[];
+  income: number;
 }
 
 // Main
 
 function Chart(props: any) {
+  let allIncome = 0;
   const data: any[] = props.data;
 
   // Functions
 
-  const putTransactionIn = (stringifiedDate: string): chargeInfo => {
-    const info: chargeInfo = {
+  const getDailyIncome = (): number[] => {
+    const copy = Array.from(data);
+    let largestIncomeRange: number = 0;
+    let smallestIncomeRange: number = 0;
+    let _allIncome = 0;
+
+    for (const trans of copy) {
+      if (trans.CHARGE) {
+        _allIncome -= float(trans.CHARGE);
+      }
+      if (trans.INCOME) {
+        _allIncome += float(trans.INCOME);
+      }
+
+      smallestIncomeRange =
+        _allIncome < smallestIncomeRange
+          ? float(_allIncome)
+          : smallestIncomeRange;
+      largestIncomeRange =
+        _allIncome > largestIncomeRange
+          ? float(_allIncome)
+          : largestIncomeRange;
+    }
+
+    return [smallestIncomeRange, largestIncomeRange];
+  };
+
+  const putTransactionIn = (stringifiedDate: string): transactionInfo => {
+    const info: transactionInfo = {
       charge: 0,
       descr: [],
+      income: allIncome,
     };
 
     const copy = Array.from(data);
@@ -45,15 +75,23 @@ function Chart(props: any) {
 
       if (transactionDate === stringifiedDate) {
         if (trans.CHARGE) {
-          info.charge += parseFloat(trans.CHARGE);
+          allIncome -= float(trans.CHARGE);
+
+          info.charge += float(trans.CHARGE);
+          info.income = allIncome;
           info.descr.push(`${trans.DESCR}^%$${trans.CHARGE}`);
-        } else if (trans.INCOME) {
-          // INCOME LOGIC
+        }
+        if (trans.INCOME) {
+          allIncome += float(trans.INCOME);
+
+          info.income = float(info.income + float(trans.INCOME));
+          info.descr.push(`INCOME ${trans.DESCR}^%$${trans.INCOME}`);
         }
       }
     }
 
-    if (info.charge) info.charge = parseFloat(info.charge.toFixed(2));
+    if (info.charge) info.charge = float(info.charge);
+    if (info.income) info.income = float(info.income);
 
     return info;
   };
@@ -80,9 +118,11 @@ function Chart(props: any) {
       };
       const stringifiedDate: string = getReadableDateFromDateObj(dummy);
 
-      const { charge, descr } = putTransactionIn(stringifiedDate);
+      const { charge, descr, income } = putTransactionIn(stringifiedDate);
+
       obj.CHARGE = charge;
       obj.DESCR = descr.join(`|^`);
+      obj.INCOME = income;
 
       chartData.push(obj);
     }
@@ -92,7 +132,7 @@ function Chart(props: any) {
 
   const CustomTooltip = ({ active, payload, label }: tooltipProps) => {
     if (active && payload && payload.length) {
-      return payload[0].value > 0 ? (
+      return payload[0].payload.DESCR ? (
         <div>
           <div className="custom-tooltip">
             DATE -{"> "}
@@ -101,8 +141,24 @@ function Chart(props: any) {
           {payload[0].payload.DESCR.split("|^").map((descr: string) => {
             return (
               <div key={descr} className="custom-tooltip">
+                <div>
+                  --- {returnBold("Description", "#fff")}{" "}
+                  -----------------------------------------
+                </div>
                 <div>{rmvExtraText(descr.split("^%$")[0])}</div>
-                <div>$ {descr.split("^%$")[1]}</div>
+                <div>
+                  --- {returnBold("Amount", "#fff")}{" "}
+                  ---------------------------------------------
+                </div>
+                <div>
+                  ${" "}
+                  {descr.split("^%$")[0].split(" ")[0] === "INCOME"
+                    ? returnBold(rmvExtraText(descr.split("^%$")[1]), "#82ca9d")
+                    : returnBold(
+                        rmvExtraText(descr.split("^%$")[1]),
+                        "#FF7F7F"
+                      )}
+                </div>
               </div>
             );
           })}
@@ -125,6 +181,14 @@ function Chart(props: any) {
     return date;
   };
 
+  const getPercentage = (): number => {
+    const [smallestIncomeRange, largestIncomeRange] = getDailyIncome();
+    let total = largestIncomeRange - smallestIncomeRange;
+    const posPercent = (total + smallestIncomeRange) / total;
+
+    return Math.ceil(posPercent * 100) || 0;
+  };
+
   return (
     <ComposedChart
       width={900}
@@ -132,21 +196,56 @@ function Chart(props: any) {
       data={getDatesForXAxis()}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
     >
-      <CartesianGrid strokeDasharray="3 3" />
+      <defs>
+        <linearGradient id="income" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#82ca9d" stopOpacity={1} />
+          <stop
+            offset={`${getPercentage()}%`}
+            stopColor="#82ca9d"
+            stopOpacity={0}
+          />
+          <stop
+            offset={`${getPercentage()}%`}
+            stopColor="#FF7F7F"
+            stopOpacity={0}
+          />
+          <stop offset="100%" stopColor="#FF7F7F" stopOpacity={1} />
+        </linearGradient>
+      </defs>
       <XAxis
         dataKey="date"
         interval={"preserveStartEnd"}
         tickFormatter={tickToDate}
       />
-      <YAxis domain={[0, getLargestPurchase(props.data, 20)]} />
+      <YAxis domain={["dataMin", "dataMax"]} />
       <Tooltip
         content={<CustomTooltip active={false} label={""} payload={[]} />}
         position={{ x: 800, y: -150 }}
       />
       <ReferenceLine x={0} stroke="#fff" label="" />
-      <Legend height={36} />
-      <Line type="monotone" dataKey="CHARGE" stroke="#FF7F7F" dot={false} />
-      {/*#8884d8*/}
+      <Legend verticalAlign="top" align="right" height={30} />
+      <Area
+        type="monotone"
+        dataKey="INCOME"
+        stroke="#82ca9d"
+        fillOpacity={1}
+        fill="url(#income)"
+      />
+      <Line
+        type="monotone"
+        dataKey="CHARGE"
+        stroke="#FF7F7F"
+        dot={false}
+        fillOpacity={1}
+        fill="url(#charge)"
+      />
+      <ReferenceLine
+        y={0}
+        stroke="#fff"
+        strokeDasharray="3 3"
+        opacity={0.5}
+        label=""
+      />
     </ComposedChart>
   );
 }
