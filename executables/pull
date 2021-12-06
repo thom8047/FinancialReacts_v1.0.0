@@ -1,0 +1,16 @@
+#!/bin/bash
+#    Takes the app directory
+# ---------- echo $1 ----------
+
+# Takes the "backend" directory
+# ---------- echo $2 ----------
+
+# cd into Python modules in the backend, send it our 
+# app directory and then run npm start
+
+cd $2/python_modules/ &&
+    bash ParsePy $1 &&
+    echo "Pulled data and pushed to the application";
+
+cd $1 &&
+    npm start;

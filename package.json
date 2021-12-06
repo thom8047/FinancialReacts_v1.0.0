@@ -24,7 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:python": "cd C:/Users/kedwa/Desktop/python_modules/ && bash ParsePy && echo Done && cd ../GitHub/LocalRepos/FinanceTracker/financial-reacts/ && npm start"
+    "start:python": "cd %CD%/executables/ && bash pull %CD% 'C:\\Users\\kedwa\\Desktop\\GitHub\\LocalRepos\\PythonPdfParserForFinancialReacts'"
   },
   "eslintConfig": {
     "extends": [
