@@ -18,4 +18,5 @@ Because of this issue of not having a way to access transactions in any format, 
 ### PREREQUISITES
 
 - Well's fargo statements
+- Typescript | React front-end
 - Decent python knowledge
