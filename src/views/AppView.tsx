@@ -2,8 +2,8 @@
 import React from "react";
 import { ResponsiveContainer } from "recharts";
 // Modularized scripts
-import initialDate from "../algorithm/initialDate";
-import rtnFilteredNamedData from "../algorithm/rtnFilteredNamedData";
+import initialDate from "../utils/initialDate";
+import rtnFilteredNamedData from "../utils/rtnFilteredNamedData";
 // Components
 import Chart from "../components/Chart";
 import DatePicker from "../components/DatePicker";

@@ -1,5 +1,5 @@
 import React from "react";
-import rtnFilteredNamedData from "../algorithm/rtnFilteredNamedData";
+import rtnFilteredNamedData from "../utils/rtnFilteredNamedData";
 import { DateTime } from "../types";
 import { returnBold, getLargestPurchase } from "../utils";
 
