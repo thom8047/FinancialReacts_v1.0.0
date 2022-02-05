@@ -12,6 +12,7 @@
     "@types/react": "^17.0.27",
     "@types/react-dom": "^17.0.9",
     "react": "^17.0.2",
+    "react-datepicker": "^4.3.0",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
     "recharts": "^2.1.4",
@@ -23,7 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:python": "cd C:/Users/kedwa/Desktop/python_modules/ && python parse.py && echo Done && cd ../GitHub/LocalRepos/FinanceTracker/financial-reacts/ && npm start"
+    "dev": "cd %CD%/executables/ && bash pull %CD% 'C:\\Users\\kedwa\\Desktop\\GitHub\\LocalRepos\\PythonPdfParserForFinancialReacts'"
   },
   "eslintConfig": {
     "extends": [
@@ -42,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-datepicker": "^4.1.7"
   }
 }

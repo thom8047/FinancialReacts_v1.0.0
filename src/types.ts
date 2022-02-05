@@ -9,7 +9,14 @@ interface Transaction {
 interface DateTime {
   fromMonth: number;
   toMonth: number;
-  year: number;
+  fromYear: number;
+  toYear: number;
 }
 
-export type { Transaction, DateTime };
+interface tooltipProps {
+  active: boolean;
+  label: string | number;
+  payload: any[];
+}
+
+export type { Transaction, DateTime, tooltipProps };

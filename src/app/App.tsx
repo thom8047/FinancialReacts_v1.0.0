@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
 import "../styles/App.css";
-import AppView from "../views/AppView"
+import "../styles/Display.css";
+import AppView from "../views/AppView";
 
 function App() {
   return (

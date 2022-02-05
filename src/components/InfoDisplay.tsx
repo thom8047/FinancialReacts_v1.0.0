@@ -1,56 +1,119 @@
-import "../styles/Display.css";
-import React, { Dispatch, SetStateAction } from "react";
-import { Transaction } from "../types";
+import { rmvExtraText } from "../utils";
+import React from "react";
 
 interface Props {
-  data: Transaction[];
-  setCurrentSelection: Dispatch<SetStateAction<number>>;
+  data: any[];
+  selected: any[];
+  setIndividualData: (data: any[]) => void;
 }
 
-function InfoDisplay(props: Props): any {
-  const [sum, setSum] = React.useState(0);
-  React.useEffect(() => {
-    console.log(sum);
+const sumOfTrans = (list: any[]): number => {
+  let total: number = 0;
+  list.forEach((trans: any) => {
+    if (trans.CHARGE) {
+      total += parseFloat(trans.CHARGE);
+    }
   });
 
-  const handleClearClick = () => {
-    setSum(0);
-    props.data.forEach((value: Transaction, index: number) => {
+  return total;
+};
+
+function InfoDisplay(props: Props): any {
+  const [data, setData] = React.useState(Array.from(props.data));
+  const [sum, setSum] = React.useState(sumOfTrans(props.selected));
+  const [getSelectedItems, setSelectedItems] = React.useState<any[]>(
+    props.selected
+  );
+  const [tabState, setTabState] = React.useState<string>("All");
+  const [hoveredDate, setHoveredDate] = React.useState<string>("");
+  const listOfNames: string[] = ["All", "KING SOOPERS", "FUEL", "WINE", "AMZN"];
+
+  const handleClearClick = (_data: any[]) => {
+    let specificSum: number = 0,
+      specificValues: any[] = [];
+    _data.forEach((value: any, index: number) => {
+      if (getSelectedItems.includes(value)) {
+        specificSum += parseFloat(value.CHARGE);
+        specificValues.push(value);
+      }
+
       var ele = [
         document.getElementById(`Tag${index}`),
         document.getElementById(`Descr${index}`),
       ] as HTMLElement[];
-      ele[0].setAttribute("data-selected", "false");
-      ele[0].style.color = "#fff";
-      ele[1].setAttribute("data-selected", "false");
-      ele[1].style.color = "#fff";
+      if (ele[0] && ele[1]) {
+        let class_name = ele[0].getAttribute("class") || "";
+        ele[0].setAttribute("class", class_name.split("-selected")[0]);
+        class_name = ele[1].getAttribute("class") || "";
+        ele[1].setAttribute("class", class_name.split("-selected")[0]);
+      }
     });
+
+    setSum((oldSum) => oldSum - specificSum);
+    setSelectedItems((oldSelected) =>
+      oldSelected.filter((trans: any) => !specificValues.includes(trans))
+    );
+    props.setIndividualData(
+      getSelectedItems.filter((trans: any) => !specificValues.includes(trans))
+    );
+  };
+  const handleSelectAll = () => {
+    const filterBy: string = tabState;
+    const filteredData: any[] = props.data.filter((trans: any) => {
+      if (filterBy) {
+        if (filterBy === "All") {
+          return true;
+        }
+        return trans.DESCR.toLowerCase().includes(filterBy.toLowerCase());
+      }
+      return false;
+    });
+    if (getSelectedItems.includes(filteredData)) {
+      //pass
+    } else {
+      const newlySelected: any[] = Array.from(
+        new Set(getSelectedItems.concat(filteredData))
+      );
+      setSelectedItems(newlySelected);
+      setSum(() => {
+        var x: number = 0;
+        for (let trans of newlySelected) {
+          x += parseFloat(trans.CHARGE);
+        }
+        return parseFloat(x.toFixed(2));
+      });
+      props.setIndividualData(newlySelected);
+    }
   };
 
-  const getDataObj = (): JSX.Element => {
-    let chargeList: JSX.Element[] = [];
-    props.data.forEach((value: Transaction, index: number) => {
+  const getTabData = (_data: any[]): JSX.Element[] => {
+    let chargedList: JSX.Element[] = [];
+    _data.forEach((value: any, index: number) => {
+      if (value.INCOME) return false;
+      const tag = value.TRANS_DATE + value.CHARGE + value.DESCR;
+
       const handleHoverIn = () => {
-        props.setCurrentSelection(index);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
-        if (ele[0].getAttribute("data-selected") === "false") {
-          ele[0].style.color = "#ff7f7f";
-          ele[1].style.color = "#ff7f7f";
-        }
+        ele.forEach((element: HTMLElement) => {
+          element.style.textDecoration = "underline";
+        });
+
+        setHoveredDate(value.TRANS_DATE);
       };
       const handleHoverOut = () => {
-        props.setCurrentSelection(-1);
         var ele = [
           document.getElementById(`Tag${index}`),
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
-        if (ele[0].getAttribute("data-selected") === "false") {
-          ele[0].style.color = "#fff";
-          ele[1].style.color = "#fff";
-        }
+
+        ele.forEach((element: HTMLElement) => {
+          element.style.textDecoration = "unset";
+        });
+
+        setHoveredDate("");
       };
       const handleClick = () => {
         var ele = [
@@ -58,54 +121,114 @@ function InfoDisplay(props: Props): any {
           document.getElementById(`Descr${index}`),
         ] as HTMLElement[];
         var int = parseFloat(value.CHARGE);
-        if (ele[0].getAttribute("data-selected") === "true") {
+        if (getSelectedItems.includes(value)) {
           int *= -1;
-          ele[0].setAttribute("data-selected", "false");
-          ele[1].setAttribute("data-selected", "false");
-          ele[0].style.color = "#fff";
-          ele[1].style.color = "#fff";
+          ele.forEach((element: HTMLElement) => {
+            const class_name = element.getAttribute("class") || "";
+            element.setAttribute("class", class_name.split("-selected")[0]);
+          });
+
+          // Remove from state
+          setSelectedItems((oldState) =>
+            oldState.filter((ids) => !(ids === value))
+          );
+          props.setIndividualData(
+            getSelectedItems.filter((ids) => !(ids === value))
+          );
         } else {
-          ele[0].setAttribute("data-selected", "true");
-          ele[1].setAttribute("data-selected", "true");
-          ele[0].style.color = "#ff7f7f";
-          ele[1].style.color = "#ff7f7f";
+          ele.forEach((element: HTMLElement) => {
+            const class_name = element.getAttribute("class") || "";
+            element.setAttribute("class", `${class_name}-selected`);
+          });
+
+          // add to state
+          setSelectedItems((oldState) => [...oldState, value]);
+          props.setIndividualData([...getSelectedItems, value]);
         }
         setSum(parseFloat((sum + int).toFixed(2)));
       };
-      chargeList.push(
-        <div key={value.REF_ID}>
+      chargedList.push(
+        <div key={tag}>
           <span
-            className="priceTag"
+            className={
+              getSelectedItems.includes(value)
+                ? "priceTag-selected"
+                : "priceTag"
+            }
             id={"Tag" + index}
             onClick={handleClick}
-            data-selected={false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
-            {value.CHARGE}
+            {parseFloat(value.CHARGE).toFixed(2)}
           </span>
           <span
-            className="priceDescr"
+            className={
+              getSelectedItems.includes(value)
+                ? "priceDescr-selected"
+                : "priceDescr"
+            }
             id={"Descr" + index}
             onClick={handleClick}
-            data-selected={false}
             onMouseEnter={handleHoverIn}
             onMouseLeave={handleHoverOut}
           >
-            {value.DESCR}
+            {rmvExtraText(value.DESCR)}
           </span>
         </div>
       );
     });
 
+    return chargedList;
+  };
+
+  const getDataObj = (): JSX.Element => {
     return (
       <div>
         <div className="display">
-          <div className="priceInfo">{chargeList}</div>
+          <div id="tabs-parent" className="priceInfo-Tabs">
+            {listOfNames.map((value: string) => {
+              let className: string = "tabs";
+              if (value === tabState) {
+                className += "-selected";
+              } else {
+                className = "tabs";
+              }
+
+              const handleTabChange = () => {
+                if (value === "All") {
+                  setData(props.data);
+                } else {
+                  setData(
+                    props.data.filter((trans: any) =>
+                      trans.DESCR.toLowerCase().includes(value.toLowerCase())
+                    )
+                  );
+                }
+
+                setTabState(value);
+              };
+              return (
+                <span
+                  key={`${value}${props.selected.length}`}
+                  className={className}
+                  id={value}
+                  onClick={handleTabChange}
+                >
+                  {value}
+                </span>
+              );
+            })}
+            <span className="tab-date-hover">{hoveredDate}</span>
+          </div>
+          <div className="priceInfo">{getTabData(data)}</div>
         </div>
         <div className="priceSum">
-          SUM: <span>{sum}</span>
-          <span className="clearState" onClick={handleClearClick}>
+          SUM: <span>{sum.toFixed(2)}</span>
+          <span className="clearState" onClick={handleSelectAll}>
+            SELECT ALL
+          </span>
+          <span className="clearState" onClick={() => handleClearClick(data)}>
             CLEAR
           </span>
         </div>
